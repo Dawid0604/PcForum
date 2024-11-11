@@ -1,0 +1,58 @@
+# Global ignores
+.DS_Store
+Thumbs.db
+
+# Node / Angular (.frontend)
+frontend/node_modules
+frontend/dist
+frontend/.angular/cache
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# Java / Spring Boot (.backend)
+backend/target
+backend/bin
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/*.iml
+backend/*.log
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/.env
+backend/.idea/
+backend/.vscode/
+backend/spring-boot.log
+
+# Logs
+*.log
+**/logs/
+*.pid
+*.seed
+*.pid.lock
+
+# Temp files
+*.swp
+*.swo
+*.bak
+*.tmp
+*.temp
+
+# System files
+.idea/
+.vscode/
+*.iml
+*.class
+*.jar
+*.war
+*.ear
+
+# IntelliJ
+*.iws
+*.ipr
+out/
+
+# MacOS
+**/.DS_Store
