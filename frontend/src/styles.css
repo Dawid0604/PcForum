@@ -3,3 +3,187 @@ body {
     color: #b8b3ac;
     margin: 0;
 }
+
+main {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding-top: 2em;
+    box-sizing: border-box;
+}
+
+.box {
+    background-color: #181a1b;
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    box-sizing: border-box;    
+}
+
+#posts_box {
+    width: 73%;  
+}
+
+#left_side_box {
+    width: 22%;
+}
+
+.row_box {
+    width: 90%;
+    display: flex;    
+    flex-direction: column;
+}
+
+.row_header {
+    width: 25%;
+}
+
+.row_header h1 {
+    padding-left: 0.2em;
+    box-sizing: border-box;
+}
+
+.row_box:not(:first-child),
+.left_side_box:not(:first-child) {
+    padding-top: 3em;
+    box-sizing: border-box;
+}
+
+.row_item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 1em;
+    box-sizing: border-box;
+    padding-top: 1em;
+}
+
+.row_item:not(:last-child),
+.left_side_row_item:not(:last-child),
+.left_side_activity_user_item:not(:last-child),
+.sub_category_item:not(:first-child) {
+    border-bottom: 1px solid #555555;
+}
+
+.row_icon {
+    width: 5%;
+    text-align: center;
+}
+
+.row_title_desc_box {
+    width: 60%;
+}
+
+.row_title_desc_box > h3:hover {
+    transition-duration: 250ms;
+    color: #1265a1;
+    cursor: pointer;
+}
+
+.left_side_row_post > h1:hover {
+    transition-duration: 250ms;
+    color: #1265a1;
+    cursor: pointer;
+}
+
+.left_side_activity_user_info > h1:hover {
+    transition-duration: 250ms;
+    color: #1265a1;
+    cursor: pointer;
+}
+
+.row_last_post > h3:hover {
+    transition-duration: 250ms;
+    color: #1265a1;
+    cursor: pointer;
+}
+
+.row_stats {
+    width: 15%;
+    text-align: center;
+}
+
+.row_last_post_box {
+    width: 20%;
+    display: flex;
+    align-items: center;
+}
+
+.row_user_icon {
+    width: 25%;
+    cursor: pointer;
+}
+
+.row_user_icon img {
+    width: 45%;
+}
+
+.left_side_row_item {
+    width: 100%;
+    display: flex;
+
+    align-items: center;
+    justify-content: space-around;
+    padding-left: 1em;
+    box-sizing: border-box;
+}
+
+#left_side_activity_users {
+    display: flex;
+    height: auto;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#left_side_activity_users {
+    display: flex;
+}
+
+.left_side_activity_user_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.left_side_row_user_avatar {
+    width: 5%;
+}
+
+#left_side_activity_controls {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.activity_button {
+    cursor: pointer;
+    background-color: #202324;
+    color: #648eac;
+    border: none;
+}
+
+.activity_button:hover {
+    transition-duration: 250ms;
+    background-color: #1191ec;
+    color: #e8e6e3;
+}
+
+#left_side_activity_controls button:first-child {
+    color: #e8e6e3;
+    background-color: #1191ec;
+}
+
+.row_item_thread_post {
+    display: block;
+    font-size: 0.83em;
+    font-weight: bold;
+    margin: 1.67em 0;
+    text-decoration: none;
+    color: #b8b3ac;
+}
+
+.row_item_thread_post:hover {
+    transition-duration: 500ms;
+    text-decoration: underline;
+}

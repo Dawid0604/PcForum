@@ -1,0 +1,296 @@
+<main>
+    <section id="posts_box" class="box">
+        <div id="selected_category">
+            <h1>{{ groupedThreadCategory.name }}</h1>
+        </div>
+
+        <div id="sub_categories">          
+            <h4 *ngIf="groupedThreadCategory.subCategories && groupedThreadCategory.subCategories.length !== 0">Subcategories</h4>  
+            <div class="row_item" *ngFor="let subCategory of groupedThreadCategory.subCategories">
+                <div class="row_icon">
+                    <p>?</p>
+                </div>
+
+                <div class="row_title_desc_box">
+                    <a [routerLink]="[ '/threads', subCategory.encryptedId, subCategory.name]">{{ subCategory.name }}</a>
+                    <p class="row_desc">{{subCategory.description}}</p>
+                </div>
+                
+                <div class="row_stats">
+                    <p>{{ subCategory.numberOfRows }} rows</p>
+                </div>
+
+                <div class="row_last_post_box">
+                    <div class="row_user_icon">
+                        @if (subCategory.newestThread) {
+                            <div>
+                                <img [src]="subCategory.newestThread.authorAvatar" title="Enter to user profile">
+                            </div>
+                        }
+                    </div>
+
+                    @if (subCategory.newestThread) {                                        
+                        <div class="row_last_post">
+                            <a [routerLink]="[ '/thread', subCategory.newestThread.encryptedId, subCategory.newestThread.title ]" class="row_item_thread_post">
+                                {{subCategory.newestThread.title}} <br> By {{subCategory.newestThread.authorNickname}},&nbsp; {{subCategory.newestThread.lastActivityDate}}
+                            </a>
+                        </div>
+
+                    } @else {
+                        <div class="row_last_post">
+                            <h5>Currently no threads</h5>
+                        </div>
+                    }                    
+                </div>
+            </div>
+        </div>
+
+        <div id="pagination">
+            <div id="pages_counter_box">
+                @if(pageableCategoryThreads.totalPages > 0) {
+                    <p>{{pageableCategoryThreads.number + 1}}/{{pageableCategoryThreads.totalPages}}</p>
+
+                } @else {
+                    <p>1/1</p>
+                }
+                
+            </div>
+
+            <div id="pagination_buttons_box">
+                <div class="pagination_button">
+                    <button [disabled]="pageableCategoryThreads.last || pageableCategoryThreads.empty" class="pagination_button">Next</button>
+                </div>
+
+                <div class="pagination_button">
+                    <button [disabled]="pageableCategoryThreads.first || pageableCategoryThreads.empty || pageableCategoryThreads.number < pageableCategoryThreads.totalPages" 
+                            class="pagination_button">Last</button>
+                </div>
+            </div>
+
+            <div id="pagination_sorting_box">
+                <p>Sort by</p>
+            </div>
+        </div>
+
+        <div id="selected_category_rows_box">
+            <div class="row_item" *ngFor="let thread of pageableCategoryThreads.content">
+                <div class="row_icon"></div>
+
+                <div class="row_title_desc_box">
+                    <a [routerLink]="[ '/thread', thread.encryptedId, thread.title]" class="row_item_thread_post">
+                        {{ thread.title }}<br> By: {{thread.authorNickname}}, &nbsp;{{thread.lastActivityDate}}
+
+                        @if(thread.categoryName && thread.categoryName !== groupedThreadCategory.name) {
+                            <span>,&nbsp;{{thread.categoryName}}</span>
+                        }
+                    </a>                
+                </div>
+                
+                <div class="row_stats">
+                    <p>1.5k answers</p>
+                    <p>2.3k views</p>
+                </div>
+
+                @if (thread.newestPost) {                                        
+                    <div class="row_last_post_box">
+                        <div class="row_user_icon">
+                            <img [src]="thread.newestPost.authorAvatar" title="Enter to user profile">
+                        </div>
+    
+                        <div class="row_last_post">
+                            <h5>By {{thread.newestPost.authorNickname}},&nbsp; {{thread.newestPost.createdAt}}</h5>
+                        </div>                      
+                    </div>
+
+                } @else {
+                    
+                    <div class="row_last_post_box">
+                        <div class="row_user_icon">
+                            @if (thread.newestPost) {
+                                <p>?</p>
+                            }
+                        </div>
+
+                        <div class="row_last_post">
+                            <h5>Currently no posts</h5>
+                        </div>                          
+                    </div>
+                }   
+            </div>
+        </div>
+    </section>
+
+    <section id="left_side_box" class="box">
+        <div class="left_side_box">
+            <div>
+                <h1>Popular posts</h1>
+                <hr>
+            </div>
+
+            <div class="left_side_row_item">
+                <div class="popular_row_user_avatar">
+                    <p>?</p>
+                </div>
+
+                <div class="left_side_row_post">
+                    <h1>Header1</h1>
+                    <h5>UserName # Yesterday # 515 posts</h5>
+                </div>
+            </div>
+
+            <div class="left_side_row_item">
+                <div class="left_side_row_user_avatar">
+                    <p>#</p>
+                </div>
+
+                <div class="left_side_row_post">
+                    <h1>Header #2</h1>
+                    <h5>UserName2 # 2 days ago # 5 posts</h5>
+                </div>
+            </div>
+
+            <div class="left_side_row_item">
+                <div class="left_side_row_user_avatar">
+                    <p>?</p>
+                </div>
+
+                <div class="left_side_row_post">
+                    <h1>Header #3</h1>
+                    <h5>UserName3 # Yesterday # 1.5k posts</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="left_side_box">
+            <div>
+                <h1>Newest posts</h1>
+                <hr>
+            </div>
+
+            <div class="left_side_row_item">
+                <div class="left_side_row_user_avatar">
+                    <p>?</p>
+                </div>
+
+                <div class="left_side_row_post">
+                    <h1>Header1</h1>
+                    <h5>UserName # 5 minutes ago</h5>
+                </div>
+            </div>
+
+            <div class="left_side_row_item">
+                <div class="left_side_row_user_avatar">
+                    <p>?</p>
+                </div>
+
+                <div class="left_side_row_post">
+                    <h1>Header #2</h1>
+                    <h5>UserName2 # 2 days ago</h5>
+                </div>
+            </div>
+
+            <div class="left_side_row_item">
+                <div class="left_side_row_user_avatar">
+                    <p>?</p>
+                </div>
+
+                <div class="left_side_row_post">
+                    <h1>Header #3</h1>
+                    <h5>UserName3 # 2 hours ago</h5>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="left_side_box">
+            <div>
+                <h1>Activity</h1>
+                <hr>
+            </div>
+
+            <div id="left_side_activity_controls">
+                <button class="activity_button">Week</button>
+                <button class="activity_button">Month</button>
+                <button class="activity_button">Annually</button>
+                <button class="activity_button">All the time</button>
+            </div>
+
+            <div id="left_side_activity_users">
+                <div class="left_side_activity_user_item">
+                    <div class="left_side_activity_user_place">
+                        <p>1</p>
+                    </div>
+
+                    <div class="left_side_activity_user_avatar">
+                        <p>#</p>
+                    </div>
+
+                    <div class="left_side_activity_user_info">
+                        <h1>UserXyz3</h1>
+                        <h5>+250</h5>
+                    </div>
+                </div>
+
+                <div class="left_side_activity_user_item">
+                    <div class="left_side_activity_user_place">
+                        <p>2</p>
+                    </div>
+
+                    <div class="left_side_activity_user_avatar">
+                        <p>#</p>
+                    </div>
+
+                    <div class="left_side_activity_user_info">
+                        <h1>UserXyz2</h1>
+                        <h5>+150</h5>
+                    </div>
+                </div>
+
+                <div class="left_side_activity_user_item">
+                    <div class="left_side_activity_user_place">
+                        <p>3</p>
+                    </div>
+
+                    <div class="left_side_activity_user_avatar">
+                        <p>#</p>
+                    </div>
+
+                    <div class="left_side_activity_user_info">
+                        <h1>UserXyz3</h1>
+                        <h5>+100</h5>
+                    </div>
+                </div>
+
+                <div class="left_side_activity_user_item">
+                    <div class="left_side_activity_user_place">
+                        <p>4</p>
+                    </div>
+
+                    <div class="left_side_activity_user_avatar">
+                        <p>#</p>
+                    </div>
+
+                    <div class="left_side_activity_user_info">
+                        <h1>UserXyz4</h1>
+                        <h5>+50</h5>
+                    </div>
+                </div>
+
+                <div class="left_side_activity_user_item">
+                    <div class="left_side_activity_user_place">
+                        <p>5</p>
+                    </div>
+
+                    <div class="left_side_activity_user_avatar">
+                        <p>#</p>
+                    </div>
+
+                    <div class="left_side_activity_user_info">
+                        <h1>UserXyz5</h1>
+                        <h5>+5</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

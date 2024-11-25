@@ -17,6 +17,10 @@ nav {
     align-items: center;
 }
 
+#up a {
+    text-decoration: none;
+}
+
 #down {
     height: 6vh;
     width: inherit;

@@ -1,0 +1,43 @@
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  application:
+    name: PcForum
+
+  datasource:
+    url: jdbc:mysql://${DB_URL:localhost:3306}/PcForum
+    username: ${DB_USERNAME:suse}
+    password: ${DB_PASSWORD:suse}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+
+  flyway:
+    schemas: PcForum
+    baseline-on-migrate: true
+    baselineVersion: 1.0
+    baselineDescription: baseline
+
+    url: jdbc:mysql://${DB_URL:localhost:3306}/PcForum
+    user: ${DB_USERNAME:suse}
+    password: ${DB_PASSWORD:suse}
+
+custom:
+  security:
+    aes:
+      secretKey: 1n5&r~z'k[[onRNjZYLRc!khypWf6G9g
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG

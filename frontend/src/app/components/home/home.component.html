@@ -1,399 +1,53 @@
 <main>
-    <!-- Home  -->
-    <section id="posts_box" class="box" *ngIf="isHomeMode">
-        <div class="row_box">
+    <section id="posts_box" class="box">
+        <div class="row_box" *ngFor="let threadCategory of threadCategories">
             <div class="row_header">
-                <h1>Administration</h1>
+                <h1>{{ threadCategory.name }}</h1>
                 <hr>
             </div>
 
-            <div class="row_item">
+            <div class="row_item" *ngFor="let threadSubCategory of threadCategory.subCategories">
                 <div class="row_icon">
                     <p>?</p>
                 </div>
 
                 <div class="row_title_desc_box">
-                    <h3>Regulations</h3>
-                    <p class="row_desc">Any desc</p>
+                    <a [routerLink]="[ '/threads', threadSubCategory.encryptedId, threadSubCategory.name]">{{ threadSubCategory.name }}</a>
+                    <p class="row_desc">{{ threadSubCategory.description }}</p>
+
+                    <div *ngIf="threadSubCategory.subCategories" class="category_sub_categories">
+                        <a *ngFor="let threadCategorySubCategory of threadSubCategory.subCategories" 
+                           [routerLink]="[ '/threads', threadCategorySubCategory.encryptedId, threadCategory.name]">{{ threadCategorySubCategory.name }}</a>
+                    </div>
                 </div>
                 
                 <div class="row_stats">
-                    <p>5k answers</p>
+                    <p>{{threadSubCategory.numberOfRows}} answers</p>
                 </div>
 
                 <div class="row_last_post_box">
                     <div class="row_user_icon">
-                        <p>?</p>
-                    </div>
-
-                    <div class="row_last_post">
-                        <h3>Title</h3>
-                        <h5>By Userxz,&nbsp; 4 min ago</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row_item">
-                <div class="row_icon">
-                    <p>?</p>
-                </div>
-
-                <div class="row_title_desc_box">
-                    <h3>Hardware news</h3>
-                    <p class="row_desc">Any desc</p>
-                </div>
-                
-                <div class="row_stats">
-                    <p>2.5k answers</p>
-                </div>
-
-                <div class="row_last_post_box">
-                    <div class="row_user_icon">
-                        <p>?</p>
-                    </div>
-
-                    <div class="row_last_post">
-                        <h3>Title</h3>
-                        <h5>By Userxz,&nbsp; 16 min ago</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row_item">
-                <div class="row_icon">
-                    <p>#</p>
-                </div>
-
-                <div class="row_title_desc_box">
-                    <h3>Questions and suggestions</h3>
-                    <p class="row_desc">Any desc</p>
-                </div>
-                
-                <div class="row_stats">
-                    <p>12.5k answers</p>
-                </div>
-
-                <div class="row_last_post_box">
-                    <div class="row_user_icon">
-                        <p>?</p>
-                    </div>
-
-                    <div class="row_last_post">
-                        <h3>Title</h3>
-                        <h5>By Userxz,&nbsp; 32 min ago</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row_box">
-            <div class="row_header">
-                <h1>Hardware</h1>
-                <hr>
-            </div>
-
-            <div class="row_item">
-                <div class="row_icon">
-                    <p>?</p>
-                </div>
-
-                <div class="row_title_desc_box">
-                    <h3>Regulations</h3>
-                    <p class="row_desc">Any desc</p>
-                </div>
-                
-                <div class="row_stats">
-                    <p>5k answers</p>
-                </div>
-
-                <div class="row_last_post_box">
-                    <div class="row_user_icon">
-                        <p>?</p>
-                    </div>
-
-                    <div class="row_last_post">
-                        <h3>Title</h3>
-                        <h5>By Userxz,&nbsp; 4 min ago</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row_item">
-                <div class="row_icon">
-                    <p>?</p>
-                </div>
-
-                <div class="row_title_desc_box">
-                    <h3>Hardware news</h3>
-                    <p class="row_desc">Any desc</p>
-                </div>
-                
-                <div class="row_stats">
-                    <p>2.5k answers</p>
-                </div>
-
-                <div class="row_last_post_box">
-                    <div class="row_user_icon">
-                        <p>?</p>
-                    </div>
-
-                    <div class="row_last_post">
-                        <h3>Title</h3>
-                        <h5>By Userxz,&nbsp; 16 min ago</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row_item">
-                <div class="row_icon">
-                    <p>#</p>
-                </div>
-
-                <div class="row_title_desc_box">
-                    <h3>Questions and suggestions</h3>
-                    <p class="row_desc">Any desc</p>
-                </div>
-                
-                <div class="row_stats">
-                    <p>12.5k answers</p>
-                </div>
-
-                <div class="row_last_post_box">
-                    <div class="row_user_icon">
-                        <p>?</p>
-                    </div>
-
-                    <div class="row_last_post">
-                        <h3>Title</h3>
-                        <h5>By Userxz,&nbsp; 32 min ago</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Category -->
-    <section id="posts_box" class="box" *ngIf="isCategoriesMode">
-        <div id="selected_category">
-            <h1>Processors</h1>
-        </div>
-
-        <div id="sub_categories">          
-            <h4>Subcategories</h4>  
-            <div class="row_item">
-                <div class="row_icon">
-                    <p>?</p>
-                </div>
-
-                <div class="row_title_desc_box">
-                    <h3>Intel</h3>
-                    <p class="row_desc">Everything about Intel processors</p>
-                </div>
-                
-                <div class="row_stats">
-                    <p>7.11k rows</p>
-                </div>
-
-                <div class="row_last_post_box">
-                    <div class="row_user_icon">
-                        <p>?</p>
-                    </div>
-
-                    <div class="row_last_post">
-                        <h3>Title</h3>
-                        <h5>By Userxz,&nbsp; 4 min ago</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row_item">
-                <div class="row_icon">
-                    <p>?</p>
-                </div>
-
-                <div class="row_title_desc_box">
-                    <h3>AMD</h3>
-                    <p class="row_desc">Everything about AMD processors</p>
-                </div>
-                
-                <div class="row_stats">
-                    <p>2.11k rows</p>
-                </div>
-
-                <div class="row_last_post_box">
-                    <div class="row_user_icon">
-                        <p>?</p>
-                    </div>
-
-                    <div class="row_last_post">
-                        <h3>Title2</h3>
-                        <h5>By Userxz,&nbsp; 4 min ago</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="pagination">
-            <div id="pages_counter_box">
-                <p>1/3</p>
-            </div>
-
-            <div id="pagination_buttons_box">
-                <div class="pagination_button">
-                    <button class="pagination_button">Next</button>
-                </div>
-    
-                <div class="pagination_button">
-                    <button class="pagination_button">Last</button>
-                </div>
-            </div>
-
-            <div id="pagination_sorting_box">
-                <p>Sort by</p>
-            </div>
-        </div>
-
-        <div id="selected_category_rows_box">
-            <div class="row_item">
-                <div class="row_icon">
-                    <p>?</p>
-                </div>
-
-                <div class="row_title_desc_box">
-                    <h3>Title xyz</h3>
-                    <p class="row_desc">By: Tom,&nbsp; 2 hours ago,&nbsp; AMD</p>                
-                </div>
-                
-                <div class="row_stats">
-                    <p>23 answers</p>
-                    <p>630 views</p>
-                </div>
-
-                <div class="row_last_post_box">
-                    <div class="row_user_icon">
-                        <p>?</p>
-                    </div>
-
-                    <div class="row_last_post">
-                        <h3>Title</h3>
-                        <h5>By Userxz,&nbsp; 4 min ago</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row_item">
-                <div class="row_icon">
-                    <p>?</p>
-                </div>
-
-                <div class="row_title_desc_box">
-                    <h3>Title xyz2</h3>
-                    <p class="row_desc">By: Max, &nbsp;5 hours ago,&nbsp; Intel</p>
-                </div>
-                
-                <div class="row_stats">
-                    <p>1.5k answers</p>
-                    <p>2.3k views</p>
-                </div>
-
-                <div class="row_last_post_box">
-                    <div class="row_user_icon">
-                        <p>?</p>
-                    </div>
-
-                    <div class="row_last_post">
-                        <h3>Title2</h3>
-                        <h5>By Userxz,&nbsp; 4 min ago</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Thread -->
-    <section id="posts_box" class="box" *ngIf="isRowMode">
-        <div id="thread_box">
-            <div id="thread_title_box">
-                <h1>Which processor should I choose?</h1>
-
-                <div class="thread_left_box">
-                    <div id="thread_base_info">
-                        <h4>Date: 31.10.2024</h4>
-                        <p>Category: Processors, Subcategory: AMD</p>
-                    </div>
-
-                    <div id="thread_title_controls">
-                        <button>Observe</button>
-                        <button>Share</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="thread_box_content">
-                <div class="thread_user">
-                    <div class="thread_user_nickname">
-                        <h1>Jozin Z Bazin</h1>
-                    </div>
-
-                    <div class="thread_user_avatar">
-                        <p>?</p>
-                    </div>
-
-                    <div class="thread_user_info">
-                        <div class="thread_user_role">
-                            <p>User</p>
-                        </div>
-
-                        <div class="thread_user_stats">
-                            <div class="thread_user_comments">
-                                32 comments
+                        @if (threadSubCategory.newestThread) {
+                            <div>
+                                <img [src]="threadSubCategory.newestThread.authorAvatar">
                             </div>
-
-                            <div class="thread_user_likes">
-                                1.25k likes
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="thread_post_item">
-            <div class="thread_user">
-                <div class="thread_user_nickname">
-                    <h1>Jozin Z Bazin</h1>
-                </div>
-
-                <div class="thread_user_avatar">
-                    <p>?</p>
-                </div>
-
-                <div class="thread_user_info">
-                    <div class="thread_user_role">
-                        <p>User</p>
+                        }
                     </div>
 
-                    <div class="thread_user_stats">
-                        <div class="thread_user_comments">
-                            32 comments
+
+                    @if (threadSubCategory.newestThread) {                                        
+                        <div class="row_last_post">
+                            <a [routerLink]="[ '/thread', threadSubCategory.newestThread.encryptedId, threadSubCategory.newestThread.title ]" class="row_item_thread_post">
+                                {{threadSubCategory.newestThread.title}} <br> By {{threadSubCategory.newestThread.authorNickname}},&nbsp; {{threadSubCategory.newestThread.lastActivityDate}}
+                            </a>
                         </div>
 
-                        <div class="thread_user_reputation">
-                            1.25k reputations
+                    } @else {
+                        <div class="row_last_post">
+                            <h5>Currently no threads</h5>
                         </div>
-                    </div>
+                    }               
                 </div>
-            </div>
-        </div>
-
-        <div class="thread_user_post_content_box">
-            <div class="thread_user_post_date_added">
-                <p>Published date: 13.01.2024</p>
-            </div>
-
-            <div class="thread_user_post_content">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis eveniet asperiores quibusdam aut sed iste dolor, odio esse architecto. 
-                Porro ad aperiam consequatur minima nam suscipit eveniet? Odit, quidem ipsum?
             </div>
         </div>
     </section>
