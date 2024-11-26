@@ -2,8 +2,10 @@ package pl.dawid0604.pcForum.repository.thread;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import pl.dawid0604.pcForum.dao.thread.ThreadEntity;
 import pl.dawid0604.pcForum.repository.EntityBaseRepository;
 import pl.dawid0604.pcForum.repository.thread.custom.ThreadRepositoryCustom;
@@ -26,7 +28,7 @@ public interface ThreadRepository extends EntityBaseRepository<ThreadEntity>, Th
     @Query("""
             SELECT new pl.dawid0604.pcForum.dao.thread.ThreadEntity(t.encryptedId, t.title, t.createdAt, t.lastActivity,
                    new pl.dawid0604.pcForum.dao.user.UserProfileEntity(u.encryptedId, u.avatar, u.nickname), t.categoryLevelPathOne,
-                   t.categoryLevelPathTwo, t.categoryLevelPathThree)
+                   t.categoryLevelPathTwo, t.categoryLevelPathThree, t.numberOfViews)
             FROM #{#entityName} t
             LEFT JOIN t.userProfile u
             WHERE t.categoryLevelPathOne = :categoryLevelPathOne AND
@@ -48,4 +50,9 @@ public interface ThreadRepository extends EntityBaseRepository<ThreadEntity>, Th
             WHERE t.id = :threadId
            """)
     Optional<ThreadEntity> findDetailsById(long threadId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE #{#entityName} t SET t.numberOfViews = t.numberOfViews + 1 WHERE t.id = :threadId")
+    void updateThreadNumberOfViews(long threadId);
 }

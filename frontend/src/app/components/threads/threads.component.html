@@ -17,7 +17,7 @@
                 </div>
                 
                 <div class="row_stats">
-                    <p>{{ subCategory.numberOfRows }} rows</p>
+                    <p>{{ subCategory.numberOfRows }} threads</p>
                 </div>
 
                 <div class="row_last_post_box">
@@ -87,8 +87,8 @@
                 </div>
                 
                 <div class="row_stats">
-                    <p>1.5k answers</p>
-                    <p>2.3k views</p>
+                    <p>{{thread.numberOfPosts}} posts</p>
+                    <p>{{thread.numberOfViews}} views</p>
                 </div>
 
                 @if (thread.newestPost) {                                        

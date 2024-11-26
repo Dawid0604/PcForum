@@ -19,4 +19,6 @@ public interface ThreadRestService {
     HttpStatus create(NewThreadDTO payload);
 
     ThreadDetailsDTO findThreadDetails(String encryptedThreadId);
+
+    void handleThreadView(String encryptedThreadId);
 }

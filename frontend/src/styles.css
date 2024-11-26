@@ -112,11 +112,13 @@ main {
 
 .row_user_icon {
     width: 25%;
-    cursor: pointer;
+    cursor: pointer;    
 }
 
 .row_user_icon img {
     width: 45%;
+    border: 1px solid transparent;
+    border-radius: 5em;
 }
 
 .left_side_row_item {

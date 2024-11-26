@@ -108,6 +108,11 @@ class ThreadRestServiceImpl implements ThreadRestService {
     }
 
     @Override
+    public void handleThreadView(final String encryptedThreadId) {
+        threadDaoService.incrementThreadViews(encryptedThreadId);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public ThreadDetailsDTO findThreadDetails(final String encryptedThreadId) {
         return threadDaoService.findDetailsById(encryptedThreadId)
@@ -149,7 +154,8 @@ class ThreadRestServiceImpl implements ThreadRestService {
 
         return new ThreadDTO(threadEntity.getEncryptedId(), threadEntity.getTitle(), threadEntity.getUserProfile().getEncryptedId(),
                              threadEntity.getUserProfile().getNickname(), threadEntity.getUserProfile().getAvatar(),
-                             formatDate(threadEntity.getLastActivity()), categoryName, getNewestPost(threadEntity.getEncryptedId()));
+                             formatDate(threadEntity.getLastActivity()), categoryName, getNewestPost(threadEntity.getEncryptedId()),
+                             threadEntity.getNumberOfViews(), postDaoService.countPostsByThread(threadEntity.getEncryptedId()));
     }
 
     private List<ThreadCategoryDTO> mapCategories(final List<ThreadCategoryEntity> categories) {

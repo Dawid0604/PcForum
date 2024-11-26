@@ -11,4 +11,6 @@ public interface PostDaoService {
     Optional<PostEntity> findNewestByThreadId(String encryptedThreadId);
 
     long countPostsByUser(String userEncryptedId);
+
+    long countPostsByThread(String threadEncryptedId);
 }

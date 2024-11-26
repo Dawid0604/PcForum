@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Posts")
-@EqualsAndHashCode(exclude = { "userProfile", "createdAt", "reactions", "lastUpdatedAt" }, callSuper = true)
+@EqualsAndHashCode(exclude = { "userProfile", "createdAt", "reactions", "lastUpdatedAt", "content" }, callSuper = true)
 public class PostEntity extends EntityBase {
 
     @ManyToOne
@@ -27,8 +27,9 @@ public class PostEntity extends EntityBase {
     @JoinColumn(name = "UserProfileId")
     private UserProfileEntity userProfile;
 
-    @Column(name = "Content")
-    private String content;
+    @Column(name = "Content", columnDefinition = "JSON")
+    @Convert(converter = JsonPostEntityContentConverter.class)
+    private List<PostEntityContent> content;
 
     @Column(name = "CreatedAt")
     private LocalDateTime createdAt;
@@ -51,7 +52,7 @@ public class PostEntity extends EntityBase {
     }
 
     @SuppressWarnings("unused")
-    public PostEntity(final String encryptedId, final String content, final LocalDateTime createdAt,
+    public PostEntity(final String encryptedId, final List<PostEntityContent> content, final LocalDateTime createdAt,
                       final LocalDateTime lastUpdatedAt, final UserProfileEntity userProfile) {
 
         super(encryptedId);

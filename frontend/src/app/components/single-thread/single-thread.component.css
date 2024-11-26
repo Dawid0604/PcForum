@@ -124,7 +124,7 @@ blockquote {
     flex-direction: column;
 }
 
-.blackquote_author {
+blockquote > div:first-child {
     width: 100%;
     background-color: rgb(68, 66, 66);
     padding: 0.3em;
@@ -132,7 +132,7 @@ blockquote {
     box-sizing: border-box;
 }
 
-.blackquote_referenced_text {
+blockquote > div:last-child {
     width: 100%;
     padding: 0.5em;
     box-sizing: border-box;

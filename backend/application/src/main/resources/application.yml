@@ -10,6 +10,18 @@ spring:
     url: jdbc:mysql://${DB_URL:localhost:3306}/PcForum
     username: ${DB_USERNAME:suse}
     password: ${DB_PASSWORD:suse}
+    hikari:
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        cacheServerConfiguration: true
+        cacheResultSetMetadata: true
+        cacheCallableStmts: true
+        elideSetAutoCommits: true
+        useCompression: true
+        tcpKeepAlive: true
+        useLocalSessionState: true
 
   jpa:
     hibernate:

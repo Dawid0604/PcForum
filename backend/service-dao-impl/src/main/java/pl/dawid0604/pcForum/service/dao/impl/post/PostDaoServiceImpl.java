@@ -46,4 +46,10 @@ class PostDaoServiceImpl extends EntityBaseDaoServiceImpl<PostEntity>
     public long countPostsByUser(final String userEncryptedId) {
         return postRepository.countByUserId(encryptionService.decryptId(userEncryptedId));
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countPostsByThread(final String threadEncryptedId) {
+        return postRepository.countByThreadId(encryptionService.decryptId(threadEncryptedId));
+    }
 }

@@ -16,4 +16,6 @@ public interface ThreadDaoService {
                          Integer categoryLevelPathThree);
 
     Optional<ThreadEntity> findDetailsById(String encryptedThreadId);
+
+    void incrementThreadViews(String encryptedThreadId);
 }

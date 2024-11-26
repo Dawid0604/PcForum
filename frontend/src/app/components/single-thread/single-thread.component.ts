@@ -13,7 +13,7 @@ import { PostService } from '../../service/post.service';
 })
 export class SingleThreadComponent {
   pageablePosts: Pageable<PostDTO> = { } as Pageable<PostDTO>;
-  threadDetails: ThreadDetailsDTO = { } as ThreadDetailsDTO;
+  threadDetails: ThreadDetailsDTO = { } as ThreadDetailsDTO;  
 
   constructor(private threadService: ThreadService,
               private postService: PostService,
@@ -32,10 +32,17 @@ export class SingleThreadComponent {
                             });
 
           this.postService.findAllByThread(threadId)
-                                    .subscribe({
-                                      next: _res => this.pageablePosts = _res,
-                                      error: _err => console.log(_err)
-                                    });
+                          .subscribe({
+                            next: _res => this.pageablePosts = _res,
+                            error: _err => console.log(_err)
+                          });
+
+          this.threadService
+              .handleThreadView(threadId)
+              .subscribe({
+                next: _res => { },
+                error: _err => console.log(_err)
+              })
         })
   }
 }

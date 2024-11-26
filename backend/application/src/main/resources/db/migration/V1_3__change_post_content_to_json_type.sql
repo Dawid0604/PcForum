@@ -1,0 +1,1 @@
+ALTER TABLE Posts CHANGE Content Content JSON NOT NULL;

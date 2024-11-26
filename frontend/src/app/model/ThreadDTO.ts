@@ -8,5 +8,7 @@ export interface ThreadDTO {
     authorAvatar: string,
     lastActivityDate: string,
     categoryName: string,
-    newestPost: ThreadNewestPostDTO
+    newestPost: ThreadNewestPostDTO,
+    numberOfViews: number,
+    numberOfPosts: number
 }

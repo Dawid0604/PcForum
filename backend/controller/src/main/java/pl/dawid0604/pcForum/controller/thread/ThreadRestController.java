@@ -41,4 +41,10 @@ public class ThreadRestController {
     public ResponseEntity<?> create(@RequestBody final NewThreadDTO payload) {
         return new ResponseEntity<>(threadRestService.create(payload));
     }
+
+    @PatchMapping("/thread/handle/view/{encryptedId}")
+    public ResponseEntity<?> handleThreadView(@PathVariable("encryptedId") final String encryptedThreadId) {
+        threadRestService.handleThreadView(encryptedThreadId);
+        return new ResponseEntity<>(OK);
+    }
 }

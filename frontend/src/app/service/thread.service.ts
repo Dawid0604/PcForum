@@ -20,4 +20,8 @@ export class ThreadService {
   public findDetails(threadId: string): Observable<ThreadDetailsDTO> {
     return this.httpClient.get<ThreadDetailsDTO>(`${this.API}/thread/${threadId}`);
   }
+
+  public handleThreadView(threadId: string): Observable<any> {
+    return this.httpClient.patch(`${this.API}/thread/handle/view/${threadId}`, { });
+  }
 }

@@ -5,10 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.dawid0604.pcForum.dao.post.PostEntity;
+import pl.dawid0604.pcForum.dao.post.PostEntityContent;
+import pl.dawid0604.pcForum.dto.post.PostContentDTO;
 import pl.dawid0604.pcForum.dto.post.PostDTO;
 import pl.dawid0604.pcForum.dto.user.UserProfileDTO;
 import pl.dawid0604.pcForum.service.dao.post.PostDaoService;
 import pl.dawid0604.pcForum.service.dao.post.PostReactionDaoService;
+import pl.dawid0604.pcForum.service.dao.user.UserProfileDaoService;
 import pl.dawid0604.pcForum.service.post.PostRestService;
 
 import static pl.dawid0604.pcForum.utils.DateFormatter.formatDate;
@@ -18,6 +21,7 @@ import static pl.dawid0604.pcForum.utils.DateFormatter.formatDate;
 class PostRestServiceImpl implements PostRestService {
     private final PostDaoService postDaoService;
     private final PostReactionDaoService postReactionDaoService;
+    private final UserProfileDaoService userProfileDaoService;
 
     @Override
     @Transactional(readOnly = true)
@@ -34,7 +38,23 @@ class PostRestServiceImpl implements PostRestService {
                                                        postReactionDaoService.countUpVotesByUser(postEntity.getUserProfile().getEncryptedId()),
                                                        postReactionDaoService.countDownVotesByUser(postEntity.getUserProfile().getEncryptedId()));
 
-        return new PostDTO(postEntity.getEncryptedId(), postAuthor, postEntity.getContent(),
-                           formatDate(postEntity.getCreatedAt()), formatDate(postEntity.getLastUpdatedAt()));
-    } 
+        var content = postEntity.getContent()
+                                .stream()
+                                .map(this::mapContent)
+                                .toList();
+
+        return new PostDTO(postEntity.getEncryptedId(), postAuthor, content, formatDate(postEntity.getCreatedAt()),
+                           formatDate(postEntity.getLastUpdatedAt()));
+    }
+
+    private PostContentDTO mapContent(final PostEntityContent content) {
+        String authorNickname = null;
+
+        if(content.authorId() != null) {
+            authorNickname = userProfileDaoService.findNicknameById(content.authorId())
+                                                  .orElseThrow();
+        }
+
+        return new PostContentDTO(content.content(), content.blockquote(), authorNickname);
+    }
 }

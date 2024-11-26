@@ -41,6 +41,9 @@ public class ThreadEntity extends EntityBase {
     @Column(name = "IsClosed")
     private boolean isClosed;
 
+    @Column(name = "NumberOfViews")
+    private int numberOfViews;
+
     @Column(name = "CategoryLevelPathOne")
     private int categoryLevelPathOne;
 
@@ -56,6 +59,23 @@ public class ThreadEntity extends EntityBase {
     @ManyToOne
     @JoinColumn(name = "UserProfileId")
     private UserProfileEntity userProfile;
+
+    @SuppressWarnings("unused")
+    public ThreadEntity(final String encryptedId, final String title, final LocalDateTime createdAt,
+                        final LocalDateTime lastActivity, final UserProfileEntity userProfile,
+                        final int categoryLevelPathOne, final Integer categoryLevelPathTwo,
+                        final Integer categoryLevelPathThree, final int numberOfViews) {
+
+        super(encryptedId);
+        this.title = title;
+        this.createdAt = createdAt;
+        this.lastActivity = lastActivity;
+        this.userProfile = userProfile;
+        this.categoryLevelPathOne = categoryLevelPathOne;
+        this.categoryLevelPathTwo = categoryLevelPathTwo;
+        this.categoryLevelPathThree = categoryLevelPathThree;
+        this.numberOfViews = numberOfViews;
+    }
 
     @SuppressWarnings("unused")
     public ThreadEntity(final String encryptedId, final String title, final LocalDateTime createdAt,

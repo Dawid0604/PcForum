@@ -1,3 +1,7 @@
 package pl.dawid0604.pcForum.service.dao.user;
 
-public interface UserProfileDaoService { }
+import java.util.Optional;
+
+public interface UserProfileDaoService {
+    Optional<String> findNicknameById(String encryptedUserProfileId);
+}

@@ -25,35 +25,37 @@
 
             <div id="thread_box_content">
                 <div class="thread_user">
-                    <div class="thread_user_nickname">
-                        <h1>{{threadDetails.user.nickname}}</h1>
-                    </div>
-
-                    <div class="row_user_icon thread_user_avatar">
-                        @if (threadDetails.user.avatar) {    
-                            <img [src]="threadDetails.user.avatar">
-                        }
-                    </div>
-
-                    <div class="thread_user_info">
-                        <div class="thread_user_role">
-                            <p>{{threadDetails.user.rank}}</p>
+                    @if(threadDetails.user) {
+                        <div class="thread_user_nickname">
+                            <h1>{{threadDetails.user.nickname}}</h1>
                         </div>
 
-                        <div class="thread_user_stats">
-                            <div class="thread_user_comments">
-                                {{threadDetails.user.numberOfPosts}} posts
+                        <div class="row_user_icon thread_user_avatar">
+                            @if (threadDetails.user.avatar) {    
+                                <img [src]="threadDetails.user.avatar">
+                            }
+                        </div>
+
+                        <div class="thread_user_info">
+                            <div class="thread_user_role">
+                                <p>{{threadDetails.user.rank}}</p>
                             </div>
 
-                            <div class="thread_user_likes">
-                                {{threadDetails.user.numberOfUpVotes}} Up votes
-                            </div>
+                            <div class="thread_user_stats">
+                                <div class="thread_user_comments">
+                                    {{threadDetails.user.numberOfPosts}} posts
+                                </div>
 
-                            <div class="thread_user_likes">
-                                {{threadDetails.user.numberOfDownVotes}} Down votes
+                                <div class="thread_user_likes">
+                                    {{threadDetails.user.numberOfUpVotes}} Up votes
+                                </div>
+
+                                <div class="thread_user_likes">
+                                    {{threadDetails.user.numberOfDownVotes}} Down votes
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
                  
                 <div class="thread_user_content_box">                
@@ -65,7 +67,9 @@
         <div class="thread_post_item" *ngFor="let post of pageablePosts.content">
             <div class="thread_user">
                 <div class="thread_user_nickname">
-                    <h1>{{post.user.nickname}}</h1>
+                    @if(post.user) {
+                        <h1>{{post.user.nickname}}</h1>
+                    }
                 </div>
 
                 <div class="row_user_icon thread_user_avatar">
@@ -99,96 +103,23 @@
                 <div class="thread_user_date_added">
                     <p>Published date: {{post.createdAt}}</p>
                 </div>
-    
-                <div class="thread_user_content" [innerHTML]="post.content"></div>
-            </div>
-        </div>
-
-        <div class="thread_post_item">
-            <div class="thread_user">
-                <div class="thread_user_nickname">
-                    <h1>Johny Kalesony</h1>
-                </div>
-
-                <div class="thread_user_avatar">
-                    <p>?</p>
-                </div>
-
-                <div class="thread_user_info">
-                    <div class="thread_user_role">
-                        <p>User</p>
-                    </div>
-
-                    <div class="thread_user_stats">
-                        <div class="thread_user_comments">
-                            32 comments
-                        </div>
-
-                        <div class="thread_user_reputation">
-                            1.25k reputations
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="thread_user_content_box thread_user_post_content_box">
-                <div class="thread_user_date_added">
-                    <p>Published date: 13.01.2024, 12:30</p>
-                </div>
-    
+                
                 <div class="thread_user_content">
-                    <blockquote>
-                        <div class="blackquote_author">
-                            Johny Kalesony wrote at 13.01.2024, 12:29
-                        </div>
-
-                        <div class="blackquote_referenced_text">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit
-                        </div>
-                    </blockquote>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis eveniet asperiores quibusdam aut sed iste dolor, odio esse architecto. 
-                    Porro ad aperiam consequatur minima nam suscipit eveniet? Odit, quidem ipsum?
-                </div>
-            </div>
-        </div>
-
-        <div class="thread_post_item">
-            <div class="thread_user">
-                <div class="thread_user_nickname">
-                    <h1>Jasio</h1>
-                </div>
-
-                <div class="thread_user_avatar">
-                    <p>?</p>
-                </div>
-
-                <div class="thread_user_info">               
-                    <div class="thread_user_role">
-                        <p>Moderator</p>
-                    </div>
-
-                    <div class="thread_user_comments">
-                        1.32k comments
-                    </div>
-
-                    <div class="thread_user_reputation">
-                        7.25k reputations
-                    </div>
-                </div>
-            </div>
-
-            <div class="thread_user_content_box thread_user_post_content_box">
-                <div class="thread_user_date_added">
-                    <p>Published date: 13.01.2024, 12:31</p>
-                </div>
+                    <div *ngFor="let contentFragment of post.content">                    
+                        @if(contentFragment.blockquote) {
+                            <blockquote>
+                                <div> User <b>{{contentFragment.authorNickname}}</b> wrote</div>
+                                <div [innerHTML]="contentFragment.content"></div>
+                            </blockquote>
     
-                <div class="thread_user_content">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eius provident quaerat iusto esse voluptate, ad consequuntur, sunt libero accusantium, fuga mollitia eum eaque? Neque nobis sed blanditiis illum, nemo sunt?
+                        } @else {
+                            <p [innerHTML]="contentFragment.content"></p>
+                        }
+                    </div>                    
                 </div>
             </div>
         </div>
     </section>
-
 
     <section id="left_side_box" class="box">
         <div class="left_side_box">

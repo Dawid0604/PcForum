@@ -1,0 +1,1 @@
+CREATE INDEX post_user_idx ON Posts (UserProfileId);

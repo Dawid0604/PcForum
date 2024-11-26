@@ -47,7 +47,7 @@ public class WebSecurityConfiguration {
     private static final String[] WHITELIST_ENDPOINTS = {
             LOGIN_URL_ENDPOINT , "/api/v1/access/register", "/api/v1/threads/categories",
             "/api/v1/threads/categories/{encryptedId}/sub", "/api/v1/threads/{encryptedId}",
-            "/api/v1/thread/{encryptedId}", "/api/v1/post/{encryptedId}"
+            "/api/v1/thread/{encryptedId}", "/api/v1/post/{encryptedId}", "/api/v1/thread/handle/view/{encryptedId}"
     };
 
     @Bean

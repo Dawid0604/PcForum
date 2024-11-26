@@ -30,4 +30,12 @@ public interface PostRepository extends EntityBaseRepository<PostEntity>, PostRe
             WHERE u.id = :userId
            """)
     long countByUserId(long userId);
+
+    @Query("""
+            SELECT COUNT(p)
+            FROM #{#entityName} p
+            LEFT JOIN p.thread t
+            WHERE t.id = :threadId
+           """)
+    long countByThreadId(long threadId);
 }

@@ -1,9 +1,6 @@
 package pl.dawid0604.pcForum.service.dao.impl.encryption;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import pl.dawid0604.pcForum.service.dao.encryption.EncryptionService;
 import pl.dawid0604.pcForum.utils.exception.DecryptionException;
@@ -34,14 +31,10 @@ class EncryptionServiceImpl implements EncryptionService {
     private static final String POST_SUFFIX = "PST";
     private static final String POST_REACTION_SUFFIX = "PSTR";
     private static final String SEPARATOR = "&";
-
     private final SecretKeySpec secretKeySpec;
-    private final Cipher cipher;
 
-    public EncryptionServiceImpl(@Value("${custom.security.aes.secretKey}") final String secretKey) throws NoSuchPaddingException,
-                                                                                                           NoSuchAlgorithmException {
+    public EncryptionServiceImpl(@Value("${custom.security.aes.secretKey}") final String secretKey) {
         this.secretKeySpec = new SecretKeySpec(secretKey.getBytes(), ALGORITHM);
-        this.cipher = Cipher.getInstance(ALGORITHM);
     }
 
     @Override
@@ -96,24 +89,30 @@ class EncryptionServiceImpl implements EncryptionService {
 
     private String encrypt(final String idWithPrefix) throws EncryptionException {
         try {
-            cipher.init(ENCRYPT_MODE, secretKeySpec);
+            var cipher = Cipher.getInstance(ALGORITHM);
+                cipher.init(ENCRYPT_MODE, secretKeySpec);
 
             return Base64.getUrlEncoder()
                          .encodeToString(cipher.doFinal(idWithPrefix.getBytes()));
 
-        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException |
+                 NoSuchPaddingException | NoSuchAlgorithmException e) {
+
             throw new EncryptionException();
         }
     }
 
     private long decrypt(final String encryptedId) throws DecryptionException {
         try {
-            cipher.init(DECRYPT_MODE, secretKeySpec);
+            var cipher = Cipher.getInstance(ALGORITHM);
+                cipher.init(DECRYPT_MODE, secretKeySpec);
 
             return Long.parseLong(removeSuffix(new String(cipher.doFinal(Base64.getUrlDecoder()
                                                                                                            .decode(encryptedId)))));
 
-        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException |
+                 NoSuchPaddingException | NoSuchAlgorithmException e) {
+
             throw new DecryptionException();
         }
     }

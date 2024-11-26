@@ -59,4 +59,10 @@ class ThreadDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadEntity>
     public Optional<ThreadEntity> findDetailsById(final String encryptedThreadId) {
         return threadRepository.findDetailsById(encryptionService.decryptId(encryptedThreadId));
     }
+
+    @Override
+    @Transactional
+    public void incrementThreadViews(final String encryptedThreadId) {
+        threadRepository.updateThreadNumberOfViews(encryptionService.decryptId(encryptedThreadId));
+    }
 }
