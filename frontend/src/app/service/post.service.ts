@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { PostDTO } from '../model/PostDTO';
 import { Pageable } from '../model/Pageable';
 import { Observable } from 'rxjs';
+import { NewestPostDTO } from '../model/NewestPostDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -16,4 +17,7 @@ export class PostService {
     return this.httpClient.get<Pageable<PostDTO>>(`${this.API}/${threadId}`);
   }
 
+  public findNewestPosts(): Observable<NewestPostDTO[]> {
+    return this.httpClient.get<NewestPostDTO[]>(`${this.API}/newest`);
+  }
 }

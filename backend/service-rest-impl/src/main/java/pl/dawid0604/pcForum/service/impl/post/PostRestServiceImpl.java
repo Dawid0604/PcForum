@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.dawid0604.pcForum.dao.post.PostEntity;
 import pl.dawid0604.pcForum.dao.post.PostEntityContent;
+import pl.dawid0604.pcForum.dto.post.NewestPostDTO;
 import pl.dawid0604.pcForum.dto.post.PostContentDTO;
 import pl.dawid0604.pcForum.dto.post.PostDTO;
 import pl.dawid0604.pcForum.dto.user.UserProfileDTO;
@@ -13,6 +14,8 @@ import pl.dawid0604.pcForum.service.dao.post.PostDaoService;
 import pl.dawid0604.pcForum.service.dao.post.PostReactionDaoService;
 import pl.dawid0604.pcForum.service.dao.user.UserProfileDaoService;
 import pl.dawid0604.pcForum.service.post.PostRestService;
+
+import java.util.List;
 
 import static pl.dawid0604.pcForum.utils.DateFormatter.formatDate;
 
@@ -28,6 +31,22 @@ class PostRestServiceImpl implements PostRestService {
     public Page<PostDTO> findAllByThread(final String encryptedThreadId, final int page, final int size) {
         return postDaoService.findAllByThreadId(encryptedThreadId, page, size)
                              .map(this::mapPost);
+    }
+
+    @Override
+    public List<NewestPostDTO> findNewestPosts(final int numberOfPosts) {
+        return postDaoService.findNewestPosts(numberOfPosts)
+                             .stream()
+                             .map(this::mapNewestPost)
+                             .toList();
+    }
+
+    private NewestPostDTO mapNewestPost(final PostEntity postEntity) {
+        var user = new UserProfileDTO(postEntity.getUserProfile().getEncryptedId(), postEntity.getUserProfile().getNickname(),
+                                      postEntity.getUserProfile().getAvatar());
+
+        var thread = new NewestPostDTO.Thread(postEntity.getThread().getEncryptedId(), postEntity.getThread().getTitle());
+        return new NewestPostDTO(postEntity.getEncryptedId(), user, formatDate(postEntity.getCreatedAt()), thread);
     }
 
     @Transactional(readOnly = true)

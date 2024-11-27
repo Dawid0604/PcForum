@@ -3,8 +3,7 @@ import { ThreadCategoryDTO } from "./ThreadCategoryDTO";
 
 export interface GroupedThreadCategoryDTO {
     encryptedId: string,
-    name: string,
-    numberOfRows: number,
+    name: string,    
     newestThread: ThreadDTO,
     subCategories: ThreadCategoryDTO[]
 }

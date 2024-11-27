@@ -19,11 +19,19 @@ public interface ThreadRepository extends EntityBaseRepository<ThreadEntity>, Th
             SELECT COUNT(t)
             FROM #{#entityName} t
             WHERE t.categoryLevelPathOne = :categoryLevelPathOne AND
-                  (t.categoryLevelPathTwo IS NULL OR t.categoryLevelPathTwo = :categoryLevelPathTwo) AND
+                  (:categoryLevelPathTwo IS NULL OR t.categoryLevelPathTwo = :categoryLevelPathTwo) AND
                   (:categoryLevelPathThree IS NULL OR t.categoryLevelPathThree = :categoryLevelPathThree)
            """)
     long countByCategory(int categoryLevelPathOne, Integer categoryLevelPathTwo,
                          Integer categoryLevelPathThree);
+
+    @Query("""
+            SELECT COUNT(t)
+            FROM #{#entityName} t
+            WHERE t.categoryLevelPathOne = :categoryLevelPathOne AND
+                  (t.categoryLevelPathTwo IS NULL OR :categoryLevelPathTwo IS NULL OR t.categoryLevelPathTwo = :categoryLevelPathTwo)
+           """)
+    long countByCategory(int categoryLevelPathOne, Integer categoryLevelPathTwo);
 
     @Query("""
             SELECT new pl.dawid0604.pcForum.dao.thread.ThreadEntity(t.encryptedId, t.title, t.createdAt, t.lastActivity,

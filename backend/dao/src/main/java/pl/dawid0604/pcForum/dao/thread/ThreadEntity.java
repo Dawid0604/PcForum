@@ -111,4 +111,20 @@ public class ThreadEntity extends EntityBase {
         this.categoryLevelPathThree = categoryLevelPathThree;
         this.userProfile = userProfile;
     }
+
+    @SuppressWarnings("unused")
+    public ThreadEntity(final String encryptedId, final String title,
+                        final LocalDateTime createdAt, final UserProfileEntity userProfile) {
+
+        super(encryptedId);
+        this.title = title;
+        this.createdAt = createdAt;
+        this.userProfile = userProfile;
+    }
+
+    @SuppressWarnings("unused")
+    public ThreadEntity(final String encryptedId, final String title) {
+        super(encryptedId);
+        this.title = title;
+    }
 }

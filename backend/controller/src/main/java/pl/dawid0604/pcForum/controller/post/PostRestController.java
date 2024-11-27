@@ -20,4 +20,9 @@ public class PostRestController {
 
         return new ResponseEntity<>(postRestService.findAllByThread(encryptedThreadId, page, size), OK);
     }
+
+    @GetMapping("/newest")
+    public ResponseEntity<?> findPosts(@RequestParam(required = false, name = "amount", defaultValue = "3") final int numberOfPosts) {
+        return new ResponseEntity<>(postRestService.findNewestPosts(numberOfPosts), OK);
+    }
 }

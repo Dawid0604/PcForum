@@ -37,6 +37,11 @@ public class ThreadRestController {
         return new ResponseEntity<>(threadRestService.findThreadDetails(encryptedCategoryId), OK);
     }
 
+    @GetMapping("/threads/popular")
+    public ResponseEntity<?> findMostPopularThreads(@RequestParam(required = false, name = "amount", defaultValue = "3") final int numberOfThreads) {
+        return new ResponseEntity<>(threadRestService.findMostPopularThreads(numberOfThreads), OK);
+    }
+
     @PostMapping("/threads/create")
     public ResponseEntity<?> create(@RequestBody final NewThreadDTO payload) {
         return new ResponseEntity<>(threadRestService.create(payload));

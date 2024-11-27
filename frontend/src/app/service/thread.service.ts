@@ -4,6 +4,7 @@ import { ThreadDTO } from '../model/ThreadDTO';
 import { Observable } from 'rxjs';
 import { Pageable } from '../model/Pageable';
 import { ThreadDetailsDTO } from '../model/ThreadDetailsDTO';
+import { MostPopularThreadDTO } from '../model/MostPopularThreadDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,9 @@ export class ThreadService {
 
   public handleThreadView(threadId: string): Observable<any> {
     return this.httpClient.patch(`${this.API}/thread/handle/view/${threadId}`, { });
+  }
+
+  public findMostPopularThreads(): Observable<MostPopularThreadDTO[]> {
+    return this.httpClient.get<MostPopularThreadDTO[]>(`${this.API}/threads/popular`);
   }
 }

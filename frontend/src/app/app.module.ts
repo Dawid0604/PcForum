@@ -7,7 +7,12 @@ import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ThreadsComponent } from './components/threads/threads.component';
 import { SingleThreadComponent } from './components/single-thread/single-thread.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { CookieService } from 'ngx-cookie-service';
+import { FormsModule } from '@angular/forms';
+import { RequestInterceptor } from './interceptor/request.interceptor';
 
 @NgModule({
   declarations: [
@@ -15,14 +20,19 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
     HomeComponent,
     NavbarComponent,
     ThreadsComponent,
-    SingleThreadComponent
+    SingleThreadComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [
-    provideHttpClient(withInterceptorsFromDi())
+    CookieService,
+    provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

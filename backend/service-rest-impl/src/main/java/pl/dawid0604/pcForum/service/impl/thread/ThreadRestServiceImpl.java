@@ -73,9 +73,9 @@ class ThreadRestServiceImpl implements ThreadRestService {
                 subCategories.add(mapCategory(_rootCategory, _subCategories));
             }
 
-            groupedCategories.add(new GroupedThreadCategoryDTO(rootCategory.getEncryptedId(), rootCategory.getName(),
-                                                               threadDaoService.countByCategory(rootCategory.getCategoryLevelPathOne(), rootCategory.getCategoryLevelPathTwo(), rootCategory.getCategoryLevelPathThree()),
-                                                               subCategories, getNewestThread(rootCategory.getCategoryLevelPathOne(), rootCategory.getCategoryLevelPathTwo(), rootCategory.getCategoryLevelPathThree())));
+            groupedCategories.add(new GroupedThreadCategoryDTO(rootCategory.getEncryptedId(), rootCategory.getName(), subCategories,
+                                                               getNewestThread(rootCategory.getCategoryLevelPathOne(), rootCategory.getCategoryLevelPathTwo(),
+                                                               rootCategory.getCategoryLevelPathThree())));
         } return groupedCategories;
     }
 
@@ -97,9 +97,7 @@ class ThreadRestServiceImpl implements ThreadRestService {
                                                      .orElseThrow();
 
         var subCategories = threadCategoryDaoService.findAllByPathStartsWith(parentCategory.getCategoryLevelPathOne(), parentCategory.getCategoryLevelPathTwo(), parentCategory.getCategoryLevelPathThree());
-        return new GroupedThreadCategoryDTO(parentCategory.getEncryptedId(), parentCategory.getName(), threadDaoService.countByCategory(parentCategory.getCategoryLevelPathOne(),
-                                            parentCategory.getCategoryLevelPathTwo(), parentCategory.getCategoryLevelPathThree()),
-                                            mapCategories(subCategories), null);
+        return new GroupedThreadCategoryDTO(parentCategory.getEncryptedId(), parentCategory.getName(), mapCategories(subCategories), null);
     }
 
     @Override
@@ -113,7 +111,22 @@ class ThreadRestServiceImpl implements ThreadRestService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    public List<MostPopularThreadDTO> findMostPopularThreads(final int numberOfThreads) {
+        return threadDaoService.findMostPopularThreads(numberOfThreads)
+                               .stream()
+                               .map(this::mapMostPopularThread)
+                               .toList();
+    }
+
+    private MostPopularThreadDTO mapMostPopularThread(final ThreadEntity threadEntity) {
+        var user = new UserProfileDTO(threadEntity.getUserProfile().getEncryptedId(), threadEntity.getUserProfile().getNickname(),
+                                      threadEntity.getUserProfile().getAvatar());
+
+        return new MostPopularThreadDTO(threadEntity.getEncryptedId(), threadEntity.getTitle(), user, formatDate(threadEntity.getCreatedAt()),
+                                        postDaoService.countPostsByThread(threadEntity.getEncryptedId()));
+    }
+
+    @Override
     public ThreadDetailsDTO findThreadDetails(final String encryptedThreadId) {
         return threadDaoService.findDetailsById(encryptedThreadId)
                                .map(this::mapThreadDetails)
@@ -166,22 +179,34 @@ class ThreadRestServiceImpl implements ThreadRestService {
 
     @Transactional(readOnly = true)
     private ThreadCategoryDTO mapCategory(final ThreadCategoryEntity category) {
-        return new ThreadCategoryDTO(category.getEncryptedId(), category.getName(), category.getDescription(),
-                                     threadDaoService.countByCategory(category.getCategoryLevelPathOne(), category.getCategoryLevelPathTwo(),
-                                     category.getCategoryLevelPathThree()), emptyList(), getNewestThread(category.getCategoryLevelPathOne(),
-                                     category.getCategoryLevelPathTwo(), category.getCategoryLevelPathThree()));
+        long numberOfPosts = postDaoService.countPostsByCategory(category.getCategoryLevelPathOne(), category.getCategoryLevelPathTwo(),
+                                                                 category.getCategoryLevelPathThree());
+
+        long numberOfThreads = threadDaoService.countByCategory(category.getCategoryLevelPathOne(), category.getCategoryLevelPathTwo(),
+                                                                category.getCategoryLevelPathThree());
+
+        var newestThread = getNewestThread(category.getCategoryLevelPathOne(), category.getCategoryLevelPathTwo(),
+                                           category.getCategoryLevelPathThree());
+
+        return new ThreadCategoryDTO(category.getEncryptedId(), category.getName(), category.getDescription(), numberOfThreads, numberOfPosts, emptyList(), newestThread);
     }
 
     @Transactional(readOnly = true)
     private ThreadCategoryDTO mapCategory(final ThreadCategoryEntity category, final List<ThreadCategoryEntity> subCategories) {
+        long numberOfPosts = postDaoService.countPostsByCategory(category.getCategoryLevelPathOne(), category.getCategoryLevelPathTwo(),
+                                                                 category.getCategoryLevelPathThree());
+
+        long numberOfThreads = threadDaoService.countByCategory(category.getCategoryLevelPathOne(), category.getCategoryLevelPathTwo());
+
+        var newestThread = getNewestThread(category.getCategoryLevelPathOne(), category.getCategoryLevelPathTwo(),
+                                           category.getCategoryLevelPathThree());
+
         var mappedSubCategories = subCategories.stream()
                                                .map(this::mapCategory)
                                                .toList();
 
         return new ThreadCategoryDTO(category.getEncryptedId(), category.getName(), category.getDescription(),
-                                     threadDaoService.countByCategory(category.getCategoryLevelPathOne(), category.getCategoryLevelPathTwo(),
-                                     category.getCategoryLevelPathThree()), mappedSubCategories, getNewestThread(category.getCategoryLevelPathOne(),
-                                     category.getCategoryLevelPathTwo(), category.getCategoryLevelPathThree()));
+                                     numberOfThreads, numberOfPosts, mappedSubCategories, newestThread);
     }
 
     @Transactional(readOnly = true)

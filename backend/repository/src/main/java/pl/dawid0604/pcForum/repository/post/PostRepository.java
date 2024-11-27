@@ -38,4 +38,14 @@ public interface PostRepository extends EntityBaseRepository<PostEntity>, PostRe
             WHERE t.id = :threadId
            """)
     long countByThreadId(long threadId);
+
+    @Query("""
+            SELECT COUNT(p)
+            FROM #{#entityName} p
+            LEFT JOIN p.thread t
+            WHERE t.categoryLevelPathOne = :categoryLevelPathOne AND
+                  (t.categoryLevelPathTwo IS NULL OR t.categoryLevelPathTwo = :categoryLevelPathTwo) AND
+                  (:categoryLevelPathThree IS NULL OR t.categoryLevelPathThree = :categoryLevelPathThree)
+           """)
+    long countByCategory(int categoryLevelPathOne, Integer categoryLevelPathTwo, Integer categoryLevelPathThree);
 }

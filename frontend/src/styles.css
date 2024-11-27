@@ -81,7 +81,7 @@ main {
     cursor: pointer;
 }
 
-.left_side_row_post > h1:hover {
+.left_side_row_post > h3:hover {
     transition-duration: 250ms;
     color: #1265a1;
     cursor: pointer;
@@ -126,9 +126,13 @@ main {
     display: flex;
 
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     padding-left: 1em;
     box-sizing: border-box;
+}
+
+.left_side_row_item > div:last-child {
+    width: 60%;
 }
 
 #left_side_activity_users {

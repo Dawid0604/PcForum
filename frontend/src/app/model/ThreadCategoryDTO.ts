@@ -5,6 +5,7 @@ export interface ThreadCategoryDTO {
     name: string,
     description: string,
     subCategories: ThreadCategoryDTO[],
-    numberOfRows: number,
+    numberOfThreads: number,
+    numberOfPosts: number,
     newestThread: ThreadDTO
 }

@@ -2,8 +2,14 @@
     <section id="up">
         <a [routerLink]="[ '' ]" id="logo"> Logo </a>
         <div id="up_controls">
-            <button id="loginButton" class="up_button">Login</button>
-            <button id="registerButton" class="up_button">Register</button>
+            @if(!isUserLoggedIn) {                
+                <button id="loginButton" class="up_button" [routerLink]="[ 'login' ]">Login</button>
+                <button id="registerButton" class="up_button">Register</button>
+            }
+
+            @if(isUserLoggedIn) {
+                <button id="logoutButton" class="up_button" (click)="logout()">Logout</button>
+            }
         </div>
     </section>
 

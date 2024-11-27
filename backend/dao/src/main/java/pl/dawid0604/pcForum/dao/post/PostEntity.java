@@ -61,4 +61,20 @@ public class PostEntity extends EntityBase {
         this.createdAt = createdAt;
         this.lastUpdatedAt = lastUpdatedAt;
     }
+
+    @SuppressWarnings("unused")
+    public PostEntity(final String encryptedId, final ThreadEntity thread,
+                      final UserProfileEntity userProfile, final LocalDateTime createdAt) {
+
+        super(encryptedId);
+        this.thread = thread;
+        this.userProfile = userProfile;
+        this.createdAt = createdAt;
+    }
+
+    @SuppressWarnings("unused")
+    public PostEntity(final ThreadEntity thread) {
+        super();
+        this.thread = thread;
+    }
 }

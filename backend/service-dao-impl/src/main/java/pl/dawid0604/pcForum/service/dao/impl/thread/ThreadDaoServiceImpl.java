@@ -10,6 +10,7 @@ import pl.dawid0604.pcForum.service.dao.encryption.EncryptionService;
 import pl.dawid0604.pcForum.service.dao.impl.EntityBaseDaoServiceImpl;
 import pl.dawid0604.pcForum.service.dao.thread.ThreadDaoService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -56,6 +57,12 @@ class ThreadDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadEntity>
 
     @Override
     @Transactional(readOnly = true)
+    public long countByCategory(final int categoryLevelPathOne, final Integer categoryLevelPathTwo) {
+        return threadRepository.countByCategory(categoryLevelPathOne, categoryLevelPathTwo);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Optional<ThreadEntity> findDetailsById(final String encryptedThreadId) {
         return threadRepository.findDetailsById(encryptionService.decryptId(encryptedThreadId));
     }
@@ -64,5 +71,11 @@ class ThreadDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadEntity>
     @Transactional
     public void incrementThreadViews(final String encryptedThreadId) {
         threadRepository.updateThreadNumberOfViews(encryptionService.decryptId(encryptedThreadId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ThreadEntity> findMostPopularThreads(final int numberOfThreads) {
+        return threadRepository.findMostPopularThreads(numberOfThreads);
     }
 }

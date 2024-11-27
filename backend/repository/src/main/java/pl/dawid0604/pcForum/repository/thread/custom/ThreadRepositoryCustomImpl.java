@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
 import org.springframework.transaction.annotation.Transactional;
+import pl.dawid0604.pcForum.dao.post.PostEntity;
 import pl.dawid0604.pcForum.dao.thread.ThreadEntity;
 import pl.dawid0604.pcForum.dao.user.UserProfileEntity;
 
@@ -40,6 +41,29 @@ public class ThreadRepositoryCustomImpl implements ThreadRepositoryCustom {
                             .getResultList()
                             .stream()
                             .findFirst();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ThreadEntity> findMostPopularThreads(final int numberOfThreads) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<PostEntity> criteriaQuery = criteriaBuilder.createQuery(PostEntity.class);
+        Root<PostEntity> postEntityRootQuery = criteriaQuery.from(PostEntity.class);
+
+        criteriaQuery.multiselect(criteriaBuilder.construct(ThreadEntity.class, postEntityRootQuery.get("thread").get("encryptedId"),
+                                  postEntityRootQuery.get("thread").get("title"), postEntityRootQuery.get("thread").get("createdAt"),
+                                  criteriaBuilder.construct(UserProfileEntity.class, postEntityRootQuery.get("thread").get("userProfile").get("encryptedId"),
+                                  postEntityRootQuery.get("thread").get("userProfile").get("avatar"), postEntityRootQuery.get("thread").get("userProfile").get("nickname"))));
+
+        criteriaQuery.groupBy(postEntityRootQuery.get("thread").get("id"));
+        criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.count(postEntityRootQuery)));
+
+        return entityManager.createQuery(criteriaQuery)
+                            .setMaxResults(numberOfThreads)
+                            .getResultList()
+                            .stream()
+                            .map(PostEntity::getThread)
+                            .toList();
     }
 
     private static Expression<Boolean> getWhereExpression(final CriteriaBuilder criteriaBuilder, final Root<ThreadEntity> rootThreadQuery,

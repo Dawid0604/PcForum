@@ -22,7 +22,8 @@
                 </div>
                 
                 <div class="row_stats">
-                    <p>{{threadSubCategory.numberOfRows}} answers</p>
+                    <p>{{threadSubCategory.numberOfThreads}} threads</p>
+                    <p>{{threadSubCategory.numberOfPosts}} posts</p>
                 </div>
 
                 <div class="row_last_post_box">
@@ -55,40 +56,22 @@
     <section id="left_side_box" class="box">
         <div class="left_side_box">
             <div>
-                <h1>Popular posts</h1>
+                <h1>Popular threads</h1>
                 <hr>
             </div>
 
-            <div class="left_side_row_item">
-                <div class="popular_row_user_avatar">
-                    <p>?</p>
+            <div class="left_side_row_item" *ngFor="let thread of mostPopularThreads">
+                <div class="row_user_icon">
+                    <div>
+                        <img style="width: 40%;" [src]="thread.user.avatar">
+                    </div>
                 </div>
 
                 <div class="left_side_row_post">
-                    <h1>Header1</h1>
-                    <h5>UserName # Yesterday # 515 posts</h5>
-                </div>
-            </div>
-
-            <div class="left_side_row_item">
-                <div class="left_side_row_user_avatar">
-                    <p>#</p>
-                </div>
-
-                <div class="left_side_row_post">
-                    <h1>Header #2</h1>
-                    <h5>UserName2 # 2 days ago # 5 posts</h5>
-                </div>
-            </div>
-
-            <div class="left_side_row_item">
-                <div class="left_side_row_user_avatar">
-                    <p>?</p>
-                </div>
-
-                <div class="left_side_row_post">
-                    <h1>Header #3</h1>
-                    <h5>UserName3 # Yesterday # 1.5k posts</h5>
+                    <a [routerLink]="[ '/thread', thread.encryptedId, thread.title ]" class="row_item_thread_post">
+                        <h3>{{thread.title}}</h3>
+                        <h5>By <b>{{thread.user.nickname}}</b> # {{thread.createdAt}} # {{thread.numberOfPosts}} posts</h5>
+                    </a>
                 </div>
             </div>
         </div>
@@ -99,40 +82,21 @@
                 <hr>
             </div>
 
-            <div class="left_side_row_item">
-                <div class="left_side_row_user_avatar">
-                    <p>?</p>
+            <div class="left_side_row_item" *ngFor="let post of newestPosts">
+                <div class="row_user_icon">
+                    <div>
+                        <img style="width: 40%;" [src]="post.user.avatar">
+                    </div>
                 </div>
 
                 <div class="left_side_row_post">
-                    <h1>Header1</h1>
-                    <h5>UserName # 5 minutes ago</h5>
-                </div>
-            </div>
-
-            <div class="left_side_row_item">
-                <div class="left_side_row_user_avatar">
-                    <p>?</p>
-                </div>
-
-                <div class="left_side_row_post">
-                    <h1>Header #2</h1>
-                    <h5>UserName2 # 2 days ago</h5>
-                </div>
-            </div>
-
-            <div class="left_side_row_item">
-                <div class="left_side_row_user_avatar">
-                    <p>?</p>
-                </div>
-
-                <div class="left_side_row_post">
-                    <h1>Header #3</h1>
-                    <h5>UserName3 # 2 hours ago</h5>
+                    <a [routerLink]="[ '/thread', post.thread.encryptedId, post.thread.title ]" class="row_item_thread_post">
+                        <h3>{{post.thread.title}}</h3>
+                        <h5>By <b>{{post.user.nickname}}</b> # {{post.createdAt}}</h5>
+                    </a>
                 </div>
             </div>
         </div>
-
 
         <div class="left_side_box">
             <div>

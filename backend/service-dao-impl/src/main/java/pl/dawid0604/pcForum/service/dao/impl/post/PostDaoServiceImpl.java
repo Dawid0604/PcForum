@@ -10,6 +10,7 @@ import pl.dawid0604.pcForum.service.dao.encryption.EncryptionService;
 import pl.dawid0604.pcForum.service.dao.impl.EntityBaseDaoServiceImpl;
 import pl.dawid0604.pcForum.service.dao.post.PostDaoService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -51,5 +52,17 @@ class PostDaoServiceImpl extends EntityBaseDaoServiceImpl<PostEntity>
     @Transactional(readOnly = true)
     public long countPostsByThread(final String threadEncryptedId) {
         return postRepository.countByThreadId(encryptionService.decryptId(threadEncryptedId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PostEntity> findNewestPosts(final int numberOfPosts) {
+        return postRepository.findNewestPosts(numberOfPosts);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countPostsByCategory(final int categoryLevelPathOne, final Integer categoryLevelPathTwo, final Integer categoryLevelPathThree) {
+        return postRepository.countByCategory(categoryLevelPathOne, categoryLevelPathTwo, categoryLevelPathThree);
     }
 }

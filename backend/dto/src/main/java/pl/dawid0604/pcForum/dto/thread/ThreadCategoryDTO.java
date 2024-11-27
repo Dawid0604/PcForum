@@ -6,6 +6,7 @@ public record ThreadCategoryDTO(
     String encryptedId,
     String name,
     String description,
-    long numberOfRows,
+    long numberOfThreads,
+    long numberOfPosts,
     List<ThreadCategoryDTO> subCategories,
     ThreadDTO newestThread) { }
