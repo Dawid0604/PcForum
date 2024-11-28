@@ -3,7 +3,8 @@ package pl.dawid0604.pcForum.service.impl.thread;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.dawid0604.pcForum.dao.thread.ThreadCategoryEntity;
@@ -15,6 +16,7 @@ import pl.dawid0604.pcForum.service.dao.post.PostDaoService;
 import pl.dawid0604.pcForum.service.dao.post.PostReactionDaoService;
 import pl.dawid0604.pcForum.service.dao.thread.ThreadCategoryDaoService;
 import pl.dawid0604.pcForum.service.dao.thread.ThreadDaoService;
+import pl.dawid0604.pcForum.service.dao.user.UserProfileDaoService;
 import pl.dawid0604.pcForum.service.thread.ThreadRestService;
 
 import java.util.LinkedList;
@@ -22,7 +24,9 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.groupingBy;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static pl.dawid0604.pcForum.utils.DateFormatter.formatDate;
+import static pl.dawid0604.pcForum.utils.DateFormatter.getCurrentDate;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +35,7 @@ class ThreadRestServiceImpl implements ThreadRestService {
     private final ThreadCategoryDaoService threadCategoryDaoService;
     private final PostDaoService postDaoService;
     private final PostReactionDaoService postReactionDaoService;
+    private final UserProfileDaoService userProfileDaoService;
 
     @Override
     @Transactional(readOnly = true)
@@ -81,6 +86,59 @@ class ThreadRestServiceImpl implements ThreadRestService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<CreatorThreadCategoryDTO> findCreatorThreadCategories() {
+        List<CreatorThreadCategoryDTO> groupedCategories = new LinkedList<>();
+        var categories = threadCategoryDaoService.findAllCreatorCategories()
+                                                 .stream()
+                                                 .collect(groupingBy(ThreadCategoryEntity::getCategoryLevelPathOne));
+
+        for(var _groupedEntry: categories.entrySet()) {
+            var entryCategories = _groupedEntry.getValue()
+                                               .stream()
+                                               .collect(groupingBy(_category -> Pair.of(_category.getCategoryLevelPathOne(), _category.getCategoryLevelPathTwo())));
+
+            ThreadCategoryEntity rootCategory = entryCategories.entrySet()
+                                                               .stream()
+                                                               .filter(_entry -> _entry.getKey().getValue() == null)
+                                                               .findFirst()
+                                                               .map(_entry -> _entry.getValue().get(0))
+                                                               .orElseThrow();
+
+            var entryRemainingCategories = entryCategories.entrySet()
+                                                          .stream()
+                                                          .filter(_entry -> _entry.getKey().getValue() != null)
+                                                          .toList();
+
+            List<CreatorThreadCategoryDTO.ThreadSubCategory> subCategories = new LinkedList<>();
+            for(var _entry: entryRemainingCategories) {
+                var category = _entry.getValue()
+                                     .stream()
+                                     .filter(_category -> _category.getCategoryLevelPathThree() == null)
+                                     .findFirst()
+                                     .orElseThrow();
+
+                subCategories.add(new CreatorThreadCategoryDTO.ThreadSubCategory(category.getEncryptedId(), category.getName()));
+            }
+
+            groupedCategories.add(new CreatorThreadCategoryDTO(rootCategory.getName(), subCategories));
+
+        } return groupedCategories;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CreatorThreadCategoryDTO.ThreadSubCategory> findCreatorThreadCategorySubCategories(final String encryptedCategoryId) {
+        var category = threadCategoryDaoService.findCategoryPathById(encryptedCategoryId)
+                                               .orElseThrow();
+
+        return threadCategoryDaoService.findAllCreatorCategorySubCategories(category.getCategoryLevelPathOne(), category.getCategoryLevelPathTwo())
+                                       .stream()
+                                       .map(_threadCategory -> new CreatorThreadCategoryDTO.ThreadSubCategory(_threadCategory.getEncryptedId(), _threadCategory.getName()))
+                                       .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<ThreadDTO> findAllByCategoryPath(final String encryptedCategoryId, final int page, final int size) {
         var category = threadCategoryDaoService.findPathById(encryptedCategoryId)
                                                .orElseThrow();
@@ -101,8 +159,43 @@ class ThreadRestServiceImpl implements ThreadRestService {
     }
 
     @Override
-    public HttpStatus create(final NewThreadDTO payload) {
-        return null;
+    @Transactional
+    public NewThreadResponseDTO create(final NewThreadDTO payload) {
+        if(isBlank(payload.title())) {
+            throw new IllegalArgumentException("Title cannot be empty");
+        }
+
+        if(isBlank(payload.content())) {
+            throw new IllegalArgumentException("Content cannot be empty");
+        }
+
+        if(isBlank(payload.encryptedCategoryId())) {
+            throw new IllegalArgumentException("Category not specified");
+        }
+
+        var loggedUserUsername = ((User) SecurityContextHolder.getContext().getAuthentication()
+                                                                           .getPrincipal())
+                                                                           .getUsername();
+
+        var loggedUserProfile = userProfileDaoService.findByUsername(loggedUserUsername)
+                                                     .orElseThrow();
+
+        var category = threadCategoryDaoService.findCategoryPathById(payload.encryptedCategoryId())
+                                               .orElseThrow();
+
+        var thread = ThreadEntity.builder()
+                                 .userProfile(loggedUserProfile)
+                                 .createdAt(getCurrentDate())
+                                 .isClosed(false)
+                                 .content(payload.content())
+                                 .title(payload.title())
+                                 .categoryLevelPathOne(category.getCategoryLevelPathOne())
+                                 .categoryLevelPathTwo(category.getCategoryLevelPathTwo())
+                                 .categoryLevelPathThree(category.getCategoryLevelPathThree())
+                                 .build();
+
+        thread = threadDaoService.save(thread);
+        return new NewThreadResponseDTO(thread.getEncryptedId(), thread.getTitle());
     }
 
     @Override
@@ -188,7 +281,8 @@ class ThreadRestServiceImpl implements ThreadRestService {
         var newestThread = getNewestThread(category.getCategoryLevelPathOne(), category.getCategoryLevelPathTwo(),
                                            category.getCategoryLevelPathThree());
 
-        return new ThreadCategoryDTO(category.getEncryptedId(), category.getName(), category.getDescription(), numberOfThreads, numberOfPosts, emptyList(), newestThread);
+        return new ThreadCategoryDTO(category.getEncryptedId(), category.getName(), category.getDescription(), numberOfThreads,
+                                     numberOfPosts, category.getThumbnailPath(), emptyList(), newestThread);
     }
 
     @Transactional(readOnly = true)
@@ -206,7 +300,7 @@ class ThreadRestServiceImpl implements ThreadRestService {
                                                .toList();
 
         return new ThreadCategoryDTO(category.getEncryptedId(), category.getName(), category.getDescription(),
-                                     numberOfThreads, numberOfPosts, mappedSubCategories, newestThread);
+                                     numberOfThreads, numberOfPosts, category.getThumbnailPath(), mappedSubCategories, newestThread);
     }
 
     @Transactional(readOnly = true)

@@ -23,4 +23,6 @@ public interface ThreadDaoService {
     void incrementThreadViews(String encryptedThreadId);
 
     List<ThreadEntity> findMostPopularThreads(int size);
+
+    ThreadEntity save(ThreadEntity thread);
 }

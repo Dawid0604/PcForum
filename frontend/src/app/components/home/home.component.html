@@ -8,7 +8,9 @@
 
             <div class="row_item" *ngFor="let threadSubCategory of threadCategory.subCategories">
                 <div class="row_icon">
-                    <p>?</p>
+                    @if(threadSubCategory.thumbnailPath) {
+                        <img [src]="threadSubCategory.thumbnailPath">
+                    }
                 </div>
 
                 <div class="row_title_desc_box">

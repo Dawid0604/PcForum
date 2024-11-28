@@ -60,6 +60,11 @@ public class UserProfileEntity extends EntityBase {
     private List<PostEntity> posts;
 
     @SuppressWarnings("unused")
+    public UserProfileEntity(final long id) {
+        this.id = id;
+    }
+
+    @SuppressWarnings("unused")
     public UserProfileEntity(final String encryptedId, final String avatar, final String nickname) {
         super(encryptedId);
         this.avatar = avatar;

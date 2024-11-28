@@ -10,7 +10,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 public class ThreadRestController {
     private final ThreadRestService threadRestService;
 
@@ -19,9 +19,19 @@ public class ThreadRestController {
         return new ResponseEntity<>(threadRestService.findThreadCategories(), OK);
     }
 
+    @GetMapping("/threads/creator/categories")
+    public ResponseEntity<?> findCreatorThreadCategories() {
+        return new ResponseEntity<>(threadRestService.findCreatorThreadCategories(), OK);
+    }
+
     @GetMapping("/threads/categories/{encryptedId}/sub")
     public ResponseEntity<?> findThreadSubCategories(@PathVariable("encryptedId") final String encryptedParentCategoryId) {
         return new ResponseEntity<>(threadRestService.findThreadSubCategories(encryptedParentCategoryId), OK);
+    }
+
+    @GetMapping("/threads/creator/categories/{encryptedId}/sub")
+    public ResponseEntity<?> findCreatorThreadSubCategories(@PathVariable("encryptedId") final String encryptedParentCategoryId) {
+        return new ResponseEntity<>(threadRestService.findCreatorThreadCategorySubCategories(encryptedParentCategoryId), OK);
     }
 
     @GetMapping("/threads/{encryptedId}")
@@ -42,14 +52,14 @@ public class ThreadRestController {
         return new ResponseEntity<>(threadRestService.findMostPopularThreads(numberOfThreads), OK);
     }
 
-    @PostMapping("/threads/create")
+    @PostMapping("/thread/create")
     public ResponseEntity<?> create(@RequestBody final NewThreadDTO payload) {
-        return new ResponseEntity<>(threadRestService.create(payload));
+        return new ResponseEntity<>(threadRestService.create(payload), OK);
     }
 
+    @ResponseStatus(OK)
     @PatchMapping("/thread/handle/view/{encryptedId}")
-    public ResponseEntity<?> handleThreadView(@PathVariable("encryptedId") final String encryptedThreadId) {
+    public void handleThreadView(@PathVariable("encryptedId") final String encryptedThreadId) {
         threadRestService.handleThreadView(encryptedThreadId);
-        return new ResponseEntity<>(OK);
     }
 }

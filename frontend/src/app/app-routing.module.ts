@@ -5,6 +5,8 @@ import { ThreadsComponent } from './components/threads/threads.component';
 import { SingleThreadComponent } from './components/single-thread/single-thread.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { ThreadCreatorComponent } from './components/thread-creator/thread-creator.component';
+import { AuthorizationGuard } from './guard/authorization.guard';
 
 const routes: Routes = [
   {
@@ -18,6 +20,11 @@ const routes: Routes = [
   {
     path: "thread/:ref/:name",
     component: SingleThreadComponent
+  },
+  {
+    path: "thread/create",
+    canActivate: [ AuthorizationGuard ],
+    component: ThreadCreatorComponent
   },
   {
     path: "login",

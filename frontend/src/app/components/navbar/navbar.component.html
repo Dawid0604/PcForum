@@ -1,6 +1,9 @@
 <nav>
     <section id="up">
-        <a [routerLink]="[ '' ]" id="logo"> Logo </a>
+        <a [routerLink]="[ '' ]" id="logo">  
+            <img src="logo.png">
+        </a>
+
         <div id="up_controls">
             @if(!isUserLoggedIn) {                
                 <button id="loginButton" class="up_button" [routerLink]="[ 'login' ]">Login</button>
@@ -8,6 +11,19 @@
             }
 
             @if(isUserLoggedIn) {
+                <button class="up_button">
+                    <img [src]="loggedUser.avatar" style="width: 35%;">
+                    <p>&nbsp;{{loggedUser.nickname}}</p>
+                </button>
+
+                <button class="up_button" title="Create new thread" [routerLink]="[ '/thread/create' ]">
+                    <fa-icon [icon]="newThreadIcon"></fa-icon>
+                </button>
+
+                <button class="up_button" title="Account settings">
+                    <fa-icon [icon]="accountSettingsIcon"></fa-icon>
+                </button>
+
                 <button id="logoutButton" class="up_button" (click)="logout()">Logout</button>
             }
         </div>

@@ -7,6 +7,10 @@ nav {
     align-items: center;
 }
 
+#logo img {
+    width: 5em;
+}
+
 #up {
     height: 10vh;
     width: inherit;
@@ -43,9 +47,12 @@ nav {
     color: #e8e6e3;
     background-color: #1265a1;
     border: none;
-    width: 45%;
+    width: 20%;
     cursor: pointer;
     border-radius: 0.4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .up_button:hover {
@@ -54,7 +61,8 @@ nav {
 }
 
 #up_controls {
-    width: 10vw;
+    width: 15vw;
+    height: 3vh;
     display: flex;
     justify-content: space-around;
 }

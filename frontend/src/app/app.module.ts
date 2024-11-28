@@ -13,6 +13,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { CookieService } from 'ngx-cookie-service';
 import { FormsModule } from '@angular/forms';
 import { RequestInterceptor } from './interceptor/request.interceptor';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ThreadCreatorComponent } from './components/thread-creator/thread-creator.component';
 
 @NgModule({
   declarations: [
@@ -22,12 +24,14 @@ import { RequestInterceptor } from './interceptor/request.interceptor';
     ThreadsComponent,
     SingleThreadComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ThreadCreatorComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ],
   providers: [
     CookieService,

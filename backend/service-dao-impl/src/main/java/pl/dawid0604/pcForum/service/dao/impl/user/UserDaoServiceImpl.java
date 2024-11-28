@@ -28,4 +28,9 @@ class UserDaoServiceImpl extends EntityBaseDaoServiceImpl<UserEntity>
     public Optional<UserEntity> findByUsername(final String username) {
         return userRepository.findByUsername(username);
     }
+
+    @Override
+    public boolean existsByUsername(final String username) {
+        return userRepository.existsByUsernameIgnoreCase(username);
+    }
 }

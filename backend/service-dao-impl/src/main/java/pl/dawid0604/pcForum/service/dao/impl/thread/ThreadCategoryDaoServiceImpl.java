@@ -1,7 +1,5 @@
 package pl.dawid0604.pcForum.service.dao.impl.thread;
 
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.dawid0604.pcForum.dao.thread.ThreadCategoryEntity;
@@ -40,6 +38,12 @@ class ThreadCategoryDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadCatego
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<ThreadCategoryEntity> findCategoryPathById(final String encryptedThreadCategoryId) {
+        return threadCategoryRepository.findCategoryPathById(encryptionService.decryptId(encryptedThreadCategoryId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<ThreadCategoryEntity> findAllByPathStartsWith(final int categoryLevelPathOne, final Integer categoryLevelPathTwo,
                                                               final Integer categoryLevelPathThree) {
 
@@ -56,5 +60,17 @@ class ThreadCategoryDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadCatego
     @Transactional(readOnly = true)
     public Optional<String> findCategoryName(final int categoryLevelPathOne, final Integer categoryLevelPathTwo, final Integer categoryLevelPathThree) {
         return threadCategoryRepository.findCategoryName(categoryLevelPathOne, categoryLevelPathTwo, categoryLevelPathThree);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ThreadCategoryEntity> findAllCreatorCategories() {
+        return threadCategoryRepository.findAllCreatorCategories();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ThreadCategoryEntity> findAllCreatorCategorySubCategories(final int categoryLevelPathOne, final Integer categoryLevelPathTwo) {
+        return threadCategoryRepository.findAllCreatorCategorySubCategories(categoryLevelPathOne, categoryLevelPathTwo);
     }
 }

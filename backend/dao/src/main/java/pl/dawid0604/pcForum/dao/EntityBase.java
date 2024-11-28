@@ -1,11 +1,15 @@
 package pl.dawid0604.pcForum.dao;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -16,7 +20,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public abstract class EntityBase {
     @Id
     @Column(name = "Id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     protected Long id;
 
     @Column(name = "EncryptedId")

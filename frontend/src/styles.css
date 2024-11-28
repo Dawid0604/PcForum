@@ -66,9 +66,14 @@ main {
     border-bottom: 1px solid #555555;
 }
 
-.row_icon {
+.row_icon{
     width: 5%;
+    margin-right: 0.5em;
     text-align: center;
+}
+
+.row_icon img {
+    width: 75%;
 }
 
 .row_title_desc_box {

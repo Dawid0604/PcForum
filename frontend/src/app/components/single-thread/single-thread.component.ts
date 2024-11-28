@@ -5,6 +5,8 @@ import { Pageable } from '../../model/Pageable';
 import { ThreadDetailsDTO } from '../../model/ThreadDetailsDTO';
 import { PostDTO } from '../../model/PostDTO';
 import { PostService } from '../../service/post.service';
+import { MostPopularThreadDTO } from '../../model/MostPopularThreadDTO';
+import { NewestPostDTO } from '../../model/NewestPostDTO';
 
 @Component({
   selector: 'app-single-thread',
@@ -13,7 +15,9 @@ import { PostService } from '../../service/post.service';
 })
 export class SingleThreadComponent {
   pageablePosts: Pageable<PostDTO> = { } as Pageable<PostDTO>;
-  threadDetails: ThreadDetailsDTO = { } as ThreadDetailsDTO;  
+  threadDetails: ThreadDetailsDTO = { } as ThreadDetailsDTO;
+  mostPopularThreads: MostPopularThreadDTO[] = [];
+  newestPosts: NewestPostDTO[] = [];
 
   constructor(private threadService: ThreadService,
               private postService: PostService,
@@ -41,6 +45,21 @@ export class SingleThreadComponent {
               .handleThreadView(threadId)
               .subscribe({
                 next: _res => { },
+                error: _err => console.log(_err)
+              })
+
+
+          this.threadService
+              .findMostPopularThreads()
+              .subscribe({
+                next: _res => this.mostPopularThreads = _res,
+                error: _err => console.log(_err)
+              })
+  
+          this.postService
+              .findNewestPosts()
+              .subscribe({
+                next: _res => this.newestPosts = _res,
                 error: _err => console.log(_err)
               })
         })

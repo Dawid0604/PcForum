@@ -8,5 +8,6 @@ public record ThreadCategoryDTO(
     String description,
     long numberOfThreads,
     long numberOfPosts,
+    String thumbnailPath,
     List<ThreadCategoryDTO> subCategories,
     ThreadDTO newestThread) { }

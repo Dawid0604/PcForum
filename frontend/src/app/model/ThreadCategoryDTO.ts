@@ -7,5 +7,6 @@ export interface ThreadCategoryDTO {
     subCategories: ThreadCategoryDTO[],
     numberOfThreads: number,
     numberOfPosts: number,
-    newestThread: ThreadDTO
+    newestThread: ThreadDTO,
+    thumbnailPath: string
 }

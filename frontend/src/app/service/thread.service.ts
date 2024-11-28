@@ -29,4 +29,8 @@ export class ThreadService {
   public findMostPopularThreads(): Observable<MostPopularThreadDTO[]> {
     return this.httpClient.get<MostPopularThreadDTO[]>(`${this.API}/threads/popular`);
   }
+
+  public create(payload: any): Observable<any> {
+    return this.httpClient.post<any>(`${this.API}/thread/create`, payload);
+  }
 }

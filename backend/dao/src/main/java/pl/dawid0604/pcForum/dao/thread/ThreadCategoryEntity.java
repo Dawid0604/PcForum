@@ -51,4 +51,31 @@ public class ThreadCategoryEntity extends EntityBase {
         this.categoryLevelPathTwo = categoryLevelPathTwo;
         this.categoryLevelPathThree = categoryLevelPathThree;
     }
+
+    @SuppressWarnings("unused")
+    public ThreadCategoryEntity(final int categoryLevelPathOne, final Integer categoryLevelPathTwo,
+                                final Integer categoryLevelPathThree) {
+
+        this.categoryLevelPathOne = categoryLevelPathOne;
+        this.categoryLevelPathTwo = categoryLevelPathTwo;
+        this.categoryLevelPathThree = categoryLevelPathThree;
+    }
+
+    @SuppressWarnings("unused")
+    public ThreadCategoryEntity(final String encryptedId, final String name) {
+        super(encryptedId);
+        this.name = name;
+    }
+
+    @SuppressWarnings("unused")
+    public ThreadCategoryEntity(final String encryptedId, final String name,
+                                final int categoryLevelPathOne, final Integer categoryLevelPathTwo,
+                                final Integer categoryLevelPathThree) {
+
+        super(encryptedId);
+        this.name = name;
+        this.categoryLevelPathOne = categoryLevelPathOne;
+        this.categoryLevelPathTwo = categoryLevelPathTwo;
+        this.categoryLevelPathThree = categoryLevelPathThree;
+    }
 }

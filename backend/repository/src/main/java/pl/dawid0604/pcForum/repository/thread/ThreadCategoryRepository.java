@@ -38,6 +38,13 @@ public interface ThreadCategoryRepository extends EntityBaseRepository<ThreadCat
     Optional<ThreadCategoryEntity> findCategoryById(long threadCategoryId);
 
     @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.thread.ThreadCategoryEntity(t.categoryLevelPathOne, t.categoryLevelPathTwo, t.categoryLevelPathThree)
+            FROM #{#entityName} t
+            WHERE t.id = :threadCategoryId
+           """)
+    Optional<ThreadCategoryEntity> findCategoryPathById(long threadCategoryId);
+
+    @Query("""
             SELECT t.name
             FROM #{#entityName} t
             WHERE t.categoryLevelPathOne = :categoryLevelPathOne AND
@@ -45,4 +52,21 @@ public interface ThreadCategoryRepository extends EntityBaseRepository<ThreadCat
                   ((:categoryLevelPathThree IS NULL AND t.categoryLevelPathThree IS NULL) OR t.categoryLevelPathThree = :categoryLevelPathThree)
            """)
     Optional<String> findCategoryName(int categoryLevelPathOne, Integer categoryLevelPathTwo, Integer categoryLevelPathThree);
+
+    @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.thread.ThreadCategoryEntity(t.encryptedId, t.name, t.categoryLevelPathOne, t.categoryLevelPathTwo, t.categoryLevelPathThree)
+            FROM #{#entityName} t
+            WHERE t.categoryLevelPathOne IS NOT NULL AND
+                  t.categoryLevelPathThree IS NULL
+           """)
+    List<ThreadCategoryEntity> findAllCreatorCategories();
+
+    @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.thread.ThreadCategoryEntity(t.encryptedId, t.name)
+            FROM #{#entityName} t
+            WHERE t.categoryLevelPathOne = :categoryLevelPathOne AND
+                  t.categoryLevelPathTwo = :categoryLevelPathTwo AND
+                  t.categoryLevelPathThree IS NOT NULL
+           """)
+    List<ThreadCategoryEntity> findAllCreatorCategorySubCategories(int categoryLevelPathOne, Integer categoryLevelPathTwo);
 }

@@ -32,4 +32,9 @@ public class UserProfileRankEntity extends EntityBase {
     public UserProfileRankEntity(final String name) {
         this.name = name;
     }
+
+    @SuppressWarnings("unused")
+    public UserProfileRankEntity(final long id) {
+        this.id = id;
+    }
 }

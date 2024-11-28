@@ -6,4 +6,8 @@ import java.util.Optional;
 
 public interface UserDaoService {
     Optional<UserEntity> findByUsername(String username);
+
+    boolean existsByUsername(String username);
+
+    UserEntity save(UserEntity user);
 }

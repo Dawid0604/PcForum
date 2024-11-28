@@ -1,124 +1,49 @@
 <main>
     <section id="posts_box" class="box">
         <div id="thread_box">
-            <div id="thread_title_box">
-                <h1>{{threadDetails.title}}</h1>
+            <form name="form" (ngSubmit)="create()" #f="ngForm">
+                <div id="thread_title_box">
+                    <h1>Creating new thread</h1>            
 
-                <div id="thread_right_box">
-                    <div id="thread_base_info">
-                        <div>
-                            <h4>Publication date: {{threadDetails.createdAt}}</h4>
-                        </div>
-                        
-                        <div id="category_subcategory_box">
-                            <p><b>Category:</b> {{threadDetails.categoryName}}</p>
-                            <p><b>Subcategory:</b> {{threadDetails.subCategoryName}}</p>
-                        </div>
-                    </div>
+                    <div id="thread_right_box">
+                        <div id="thread_base_info">              
+                            <div id="category_subcategory_box">
+                                <p style="margin-right: 2em;"><b>Category: &nbsp;</b> 
+                                    <select name="categories" (change)="selectCategory($event)">
+                                        <option selected></option>
+                                        <optgroup *ngFor="let category of categories" [label]="category.name">
+                                            <option *ngFor="let subCategory of category.subCategories" [value]="subCategory.encryptedId">{{subCategory.name}}</option>
+                                        </optgroup>
+                                    </select>
+                                </p>
 
-                    <div id="thread_title_controls">
-                        <button class="button" style="background-color: #54a120;">Observe</button>
-                        <button class="button" style="background-color: #aa692c;">Share</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="thread_box_content">
-                <div class="thread_user">
-                    @if(threadDetails.user) {
-                        <div class="thread_user_nickname">
-                            <h1>{{threadDetails.user.nickname}}</h1>
-                        </div>
-
-                        <div class="row_user_icon thread_user_avatar">
-                            @if (threadDetails.user.avatar) {    
-                                <img [src]="threadDetails.user.avatar">
-                            }
-                        </div>
-
-                        <div class="thread_user_info">
-                            <div class="thread_user_role">
-                                <p>{{threadDetails.user.rank}}</p>
-                            </div>
-
-                            <div class="thread_user_stats">
-                                <div class="thread_user_comments">
-                                    {{threadDetails.user.numberOfPosts}} posts
-                                </div>
-
-                                <div class="thread_user_likes">
-                                    {{threadDetails.user.numberOfUpVotes}} Up votes
-                                </div>
-
-                                <div class="thread_user_likes">
-                                    {{threadDetails.user.numberOfDownVotes}} Down votes
-                                </div>
+                                <p><b>Subcategory: &nbsp;</b> 
+                                    <select name="subcategories" (change)="selectSubCategory($event)">
+                                        <option selected></option>
+                                        <option *ngFor="let subCategory of subCategories" [value]="subCategory.encryptedId">{{subCategory.name}}</option>
+                                    </select>
+                                </p>
                             </div>
                         </div>
-                    }
-                </div>
-                 
-                <div class="thread_user_content_box">                
-                    <div class="thread_user_content" [innerHTML]="threadDetails.content"></div>
-                </div>
-            </div>
-        </div>
 
-        <div class="thread_post_item" *ngFor="let post of pageablePosts.content">
-            <div class="thread_user">
-                <div class="thread_user_nickname">
-                    @if(post.user) {
-                        <h1>{{post.user.nickname}}</h1>
-                    }
-                </div>
-
-                <div class="row_user_icon thread_user_avatar">
-                    @if (post.user.avatar) {    
-                        <img [src]="post.user.avatar">
-                    }
-                </div>
-
-                <div class="thread_user_info">
-                    <div class="thread_user_role">
-                        <p>{{post.user.rank}}</p>
-                    </div>
-
-                    <div class="thread_user_stats">
-                        <div class="thread_user_comments">
-                            {{post.user.numberOfPosts}} posts
-                        </div>
-
-                        <div class="thread_user_likes">
-                            {{post.user.numberOfUpVotes}} Up votes
-                        </div>
-
-                        <div class="thread_user_likes">
-                            {{post.user.numberOfDownVotes}} Down votes
+                        <div id="thread_title_controls">
+                            <button class="button" type="submit" style="background-color: #54a120;">Create</button>                        
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="thread_user_content_box thread_user_post_content_box">
-                <div class="thread_user_date_added">
-                    <p>Published date: {{post.createdAt}}</p>
+                <div id="thread_box_content">
+                    <div class="thread_title_box">
+                        <label for="title">Title</label>
+                        <input [(ngModel)]="form.title" name="title" #title="ngModel" required name="title" type="text" placeholder="Enter your title">
+                    </div>
+                    
+                    <div class="thread_content_box">
+                        <textarea [(ngModel)]="form.content" name="content" #content="ngModel" required placeholder="Describe your problem"></textarea>
+                    </div>
                 </div>
-                
-                <div class="thread_user_content">
-                    <div *ngFor="let contentFragment of post.content">                    
-                        @if(contentFragment.blockquote) {
-                            <blockquote>
-                                <div> User <b>{{contentFragment.authorNickname}}</b> wrote</div>
-                                <div [innerHTML]="contentFragment.content"></div>
-                            </blockquote>
-    
-                        } @else {
-                            <p [innerHTML]="contentFragment.content"></p>
-                        }
-                    </div>                    
-                </div>
-            </div>
-        </div>
+            </form>    
+        </div>        
     </section>
 
     <section id="left_side_box" class="box">

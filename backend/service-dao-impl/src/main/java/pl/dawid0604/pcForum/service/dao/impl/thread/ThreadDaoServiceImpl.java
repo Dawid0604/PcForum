@@ -13,6 +13,8 @@ import pl.dawid0604.pcForum.service.dao.thread.ThreadDaoService;
 import java.util.List;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 @Service
 class ThreadDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadEntity>
                            implements ThreadDaoService {
@@ -77,5 +79,17 @@ class ThreadDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadEntity>
     @Transactional(readOnly = true)
     public List<ThreadEntity> findMostPopularThreads(final int numberOfThreads) {
         return threadRepository.findMostPopularThreads(numberOfThreads);
+    }
+
+    @Override
+    @Transactional
+    public ThreadEntity save(ThreadEntity thread) {
+        if(isNotBlank(thread.getEncryptedId())) {
+            return threadRepository.save(thread);
+        }
+
+        thread = threadRepository.save(thread);
+        thread.setEncryptedId(encryptionService.encryptThread(thread.getId()));
+        return threadRepository.save(thread);
     }
 }
