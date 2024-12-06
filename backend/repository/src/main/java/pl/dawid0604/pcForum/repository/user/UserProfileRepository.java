@@ -11,13 +11,6 @@ import java.util.Optional;
 public interface UserProfileRepository extends EntityBaseRepository<UserProfileEntity> {
 
     @Query("""
-            SELECT u.nickname
-            FROM #{#entityName} u
-            WHERE u.id = :userProfileId
-           """)
-    Optional<String> findNicknameById(long userProfileId);
-
-    @Query("""
             SELECT new pl.dawid0604.pcForum.dao.user.UserProfileEntity(p.encryptedId, p.avatar, p.nickname)
             FROM #{#entityName} p
             LEFT JOIN p.user u
@@ -26,11 +19,35 @@ public interface UserProfileRepository extends EntityBaseRepository<UserProfileE
     Optional<UserProfileEntity> findBaseInfoByUsername(String username);
 
     @Query("""
-            SELECT new pl.dawid0604.pcForum.dao.user.UserProfileEntity(p.id)
+            SELECT new pl.dawid0604.pcForum.dao.user.UserProfileEntity(p.id, p.encryptedId)
             FROM #{#entityName} p
             WHERE p.user.username = :username
            """)
-    Optional<UserProfileEntity> findByUsername(String username);
+    Optional<UserProfileEntity> findIdByUsername(String username);
 
     boolean existsByNicknameIgnoreCase(String nickname);
+
+    @Query("""
+            SELECT p.encryptedId
+            FROM #{#entityName} p
+            WHERE p.user.username = :username
+           """)
+    Optional<String> findEncryptedIdByUsername(String username);
+
+    @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.user.UserProfileEntity(p.id, p.encryptedId)
+            FROM #{#entityName} p
+            WHERE p.id = :userId
+           """)
+    Optional<UserProfileEntity> findIdByIdWithoutFields(long userId);
+
+    @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.user.UserProfileEntity(p.encryptedId, p.avatar, p.createdAt, p.nickname,
+                            p.lastActivity, p.isOnline, new pl.dawid0604.pcForum.dao.user.UserProfileRankEntity(r.name))
+            FROM #{#entityName} p
+            LEFT JOIN p.user u
+            LEFT JOIN p.rank r
+            WHERE p.id = :userId
+           """)
+    Optional<UserProfileEntity> findDetailsInfoByUsername(long userId);
 }

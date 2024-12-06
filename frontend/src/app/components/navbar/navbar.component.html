@@ -11,9 +11,8 @@
             }
 
             @if(isUserLoggedIn) {
-                <button class="up_button">
-                    <img [src]="loggedUser.avatar" style="width: 35%;">
-                    <p>&nbsp;{{loggedUser.nickname}}</p>
+                <button class="up_button" [routerLink]="[ '/user', loggedUser.encryptedId, loggedUser.nickname]">
+                    <img [style]="{ 'border-radius': '50%' }" [src]="loggedUser.avatar" style="width: 40%;">                    
                 </button>
 
                 <button class="up_button" title="Create new thread" [routerLink]="[ '/thread/create' ]">

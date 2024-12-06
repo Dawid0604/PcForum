@@ -42,6 +42,20 @@ public class PostEntity extends EntityBase {
     private List<PostReactionEntity> reactions;
 
     @SuppressWarnings("unused")
+    public PostEntity(final long id) {
+        this.id = id;
+    }
+
+    @SuppressWarnings("unused")
+    public PostEntity(final List<PostEntityContent> content, final UserProfileEntity userProfile,
+                      final LocalDateTime createdAt) {
+
+        this.content = content;
+        this.createdAt = createdAt;
+        this.userProfile = userProfile;
+    }
+
+    @SuppressWarnings("unused")
     public PostEntity(final String encryptedId, final UserProfileEntity userProfile,
                       final LocalDateTime createdAt, final LocalDateTime lastUpdatedAt) {
 

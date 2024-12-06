@@ -23,4 +23,8 @@ public interface ThreadRestService {
     void handleThreadView(String encryptedThreadId);
 
     List<MostPopularThreadDTO> findMostPopularThreads(int size);
+
+    void closeThread(String encryptedThreadId);
+
+    void deleteThread(String encryptedThreadId);
 }

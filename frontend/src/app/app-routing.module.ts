@@ -7,6 +7,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ThreadCreatorComponent } from './components/thread-creator/thread-creator.component';
 import { AuthorizationGuard } from './guard/authorization.guard';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
   {
     path: "register",
     component: RegisterComponent
+  },
+  {
+    path: "user/:ref/:nickname",
+    component: UserProfileComponent
   }
 ];
 

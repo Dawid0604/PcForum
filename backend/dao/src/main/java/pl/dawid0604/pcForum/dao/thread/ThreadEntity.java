@@ -61,6 +61,11 @@ public class ThreadEntity extends EntityBase {
     private UserProfileEntity userProfile;
 
     @SuppressWarnings("unused")
+    public ThreadEntity(final long id) {
+        this.id = id;
+    }
+
+    @SuppressWarnings("unused")
     public ThreadEntity(final String encryptedId, final String title, final LocalDateTime createdAt,
                         final LocalDateTime lastActivity, final UserProfileEntity userProfile,
                         final int categoryLevelPathOne, final Integer categoryLevelPathTwo,

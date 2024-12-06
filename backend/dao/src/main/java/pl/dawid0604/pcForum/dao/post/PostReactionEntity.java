@@ -35,4 +35,22 @@ public class PostReactionEntity extends EntityBase {
     @Setter
     @Column(name = "DownVote")
     private boolean downVote;
+
+    @SuppressWarnings("unused")
+    public PostReactionEntity(final UserProfileEntity userProfile) {
+        this.userProfile = userProfile;
+    }
+
+    @SuppressWarnings("unused")
+    public PostReactionEntity(final String encryptedId, final boolean upVote,
+                              final boolean downVote) {
+
+        super(encryptedId);
+        this.upVote = upVote;
+        this.downVote = downVote;
+    }
+
+    public boolean isEmpty() {
+        return !upVote && !downVote;
+    }
 }

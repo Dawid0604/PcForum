@@ -3,6 +3,7 @@ package pl.dawid0604.pcForum.controller.post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.dawid0604.pcForum.dto.post.NewPostDTO;
 import pl.dawid0604.pcForum.service.post.PostRestService;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -24,5 +25,11 @@ public class PostRestController {
     @GetMapping("/newest")
     public ResponseEntity<?> findPosts(@RequestParam(required = false, name = "amount", defaultValue = "3") final int numberOfPosts) {
         return new ResponseEntity<>(postRestService.findNewestPosts(numberOfPosts), OK);
+    }
+
+    @ResponseStatus(OK)
+    @PostMapping("/create")
+    public void create(@RequestBody final NewPostDTO payload) {
+        postRestService.create(payload);
     }
 }

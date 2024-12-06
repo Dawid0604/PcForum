@@ -139,7 +139,9 @@
     padding: 0.5em;
     box-sizing: border-box;
     color: #b8b3ac;
-    background-color: #383d3f;
+    background-color: #2b2a2a;
+    border: 1px solid #333333;
+    border-radius: 0.5em;
 }
 
 .thread_content_box {
@@ -149,9 +151,17 @@
 
 textarea {
     color: #b8b3ac;
-    background-color: #383d3f;
-    padding: 0.5em;
+    background-color: #2b2a2a;
+    border: 1px solid #333333;
+    border-radius: 0.5em;
+    padding: 1em;
     box-sizing: border-box;
     width: 80%;
     height: 50vh;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #5c5750;
+    box-shadow: 0 0 5px #5c5750;
 }

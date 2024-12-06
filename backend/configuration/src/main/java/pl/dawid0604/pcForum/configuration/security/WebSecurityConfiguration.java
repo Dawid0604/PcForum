@@ -49,7 +49,8 @@ public class WebSecurityConfiguration {
             "/api/v1/threads/categories/{encryptedId}/sub", "/api/v1/threads/{encryptedId}",
             "/api/v1/thread/{encryptedId}", "/api/v1/post/{encryptedId}", "/api/v1/thread/handle/view/{encryptedId}",
             "/api/v1/post/newest", "/api/v1/threads/popular", "/api/v1/threads/creator/categories",
-            "/api/v1/threads/creator/categories/{encryptedId}/sub"
+            "/api/v1/threads/creator/categories/{encryptedId}/sub", "/api/v1/user/profile/{encryptedId}/details",
+            "/api/v1/thread/{encryptedId}/handle/view", "/api/v1/user/activity/summary"
     };
 
     @Bean

@@ -92,4 +92,25 @@ class ThreadDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadEntity>
         thread.setEncryptedId(encryptionService.encryptThread(thread.getId()));
         return threadRepository.save(thread);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<ThreadEntity> findByIdWithoutFields(final String encryptedThreadId) {
+        return threadRepository.findByIdWithoutFields(encryptionService.decryptId(encryptedThreadId));
+    }
+
+    @Override
+    public void closeThread(final String encryptedThreadId) {
+        threadRepository.setThreadAsClosed(encryptionService.decryptId(encryptedThreadId));
+    }
+
+    @Override
+    public void deleteThread(final String encryptedThreadId) {
+        threadRepository.deleteById(encryptionService.decryptId(encryptedThreadId));
+    }
+
+    @Override
+    public long countThreadsByUser(final String encryptedUserId) {
+        return threadRepository.countThreadsByUser(encryptionService.decryptId(encryptedUserId));
+    }
 }

@@ -9,4 +9,9 @@ import pl.dawid0604.pcForum.service.user.UserProfileVisitorRestService;
 @RequiredArgsConstructor
 class UserProfileVisitorRestServiceImpl implements UserProfileVisitorRestService {
     private final UserProfileVisitorDaoService userProfileVisitorDaoService;
+
+    @Override
+    public void handleProfileView(final String encryptedUserProfileId) {
+        userProfileVisitorDaoService.handleProfileView(encryptedUserProfileId);
+    }
 }

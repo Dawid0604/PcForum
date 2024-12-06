@@ -18,4 +18,10 @@ public interface PostDaoService {
     List<PostEntity> findNewestPosts(int numberOfPosts);
 
     long countPostsByCategory(int categoryLevelPathOne, Integer categoryLevelPathTwo, Integer categoryLevelPathThree);
+
+    PostEntity save(PostEntity postEntity);
+
+    Optional<PostEntity> findByIdWithoutFields(String postEncryptedId);
+
+    Optional<PostEntity> findContentAndUserById(String postEncryptedId);
 }

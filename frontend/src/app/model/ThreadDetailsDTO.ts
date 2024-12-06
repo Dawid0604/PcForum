@@ -10,5 +10,6 @@ export interface ThreadDetailsDTO {
     isClosed: boolean,
     user: UserProfileDTO,
     categoryName: string,
-    subCategoryName: string
+    subCategoryName: string,
+    loggedUserThread: boolean
 }

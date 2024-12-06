@@ -2,6 +2,7 @@ body {
     background-color: #202324;
     color: #b8b3ac;
     margin: 0;
+    font-family: Arial, sans-serif
 }
 
 main {
@@ -146,6 +147,7 @@ main {
     flex-wrap: wrap;
     flex-direction: column;
     justify-content: center;
+    padding-top: 1.5em;
 }
 
 #left_side_activity_users {
@@ -180,7 +182,7 @@ main {
     color: #e8e6e3;
 }
 
-#left_side_activity_controls button:first-child {
+.activity_button_selected {
     color: #e8e6e3;
     background-color: #1191ec;
 }
@@ -197,4 +199,28 @@ main {
 .row_item_thread_post:hover {
     transition-duration: 500ms;
     text-decoration: underline;
+}
+
+.up_button {
+    color: #e8e6e3;
+    background-color: #1265a1;
+    border: none;
+    cursor: pointer;
+    border-radius: 0.4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.up_button:disabled {    
+    background-color: rgb(75, 65, 65);    
+}
+
+.up_button:disabled:hover {    
+    background-color: rgb(88, 77, 77);    
+}
+
+.up_button:hover {
+    transition-duration: 250ms;
+    background-color: #1191ec;
 }

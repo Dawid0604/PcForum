@@ -11,6 +11,8 @@ import pl.dawid0604.pcForum.service.dao.thread.ThreadCategoryDaoService;
 import java.util.List;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 @Service
 class ThreadCategoryDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadCategoryEntity>
                                    implements ThreadCategoryDaoService {
@@ -72,5 +74,16 @@ class ThreadCategoryDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadCatego
     @Transactional(readOnly = true)
     public List<ThreadCategoryEntity> findAllCreatorCategorySubCategories(final int categoryLevelPathOne, final Integer categoryLevelPathTwo) {
         return threadCategoryRepository.findAllCreatorCategorySubCategories(categoryLevelPathOne, categoryLevelPathTwo);
+    }
+
+    @Override
+    public ThreadCategoryEntity save(ThreadCategoryEntity entity) {
+        if(isNotBlank(entity.getEncryptedId())) {
+            return threadCategoryRepository.save(entity);
+        }
+
+        entity = threadCategoryRepository.save(entity);
+        entity.setEncryptedId(encryptionService.encryptThreadCategory(entity.getId()));
+        return threadCategoryRepository.save(entity);
     }
 }

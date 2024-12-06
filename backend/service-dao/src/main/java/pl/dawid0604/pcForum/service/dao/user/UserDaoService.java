@@ -10,4 +10,6 @@ public interface UserDaoService {
     boolean existsByUsername(String username);
 
     UserEntity save(UserEntity user);
+
+    String encryptPassword(String password);
 }

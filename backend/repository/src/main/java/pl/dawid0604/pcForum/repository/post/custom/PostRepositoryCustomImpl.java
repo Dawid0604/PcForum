@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @SuppressWarnings("unused")
 public class PostRepositoryCustomImpl implements PostRepositoryCustom {
-
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -52,9 +51,11 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                                   postEntityRootQuery.get("thread").get("encryptedId"), postEntityRootQuery.get("thread").get("title")),
                                   criteriaBuilder.construct(UserProfileEntity.class, postEntityRootQuery.get("userProfile").get("encryptedId"),
                                   postEntityRootQuery.get("userProfile").get("avatar"), postEntityRootQuery.get("userProfile").get("nickname")),
-                                  postEntityRootQuery.get("createdAt"));
+                                  criteriaBuilder.max(postEntityRootQuery.get("createdAt")));
 
         criteriaQuery.orderBy(criteriaBuilder.desc(criteriaBuilder.literal(7)));
+        criteriaQuery.groupBy(postEntityRootQuery.get("thread").get("encryptedId"), postEntityRootQuery.get("userProfile").get("encryptedId"));
+
         return entityManager.createQuery(criteriaQuery)
                             .setMaxResults(numberOfPosts)
                             .getResultList();

@@ -18,9 +18,15 @@
 
 #thread_base_info {
     display: flex;
-    align-items: center;   
-    justify-content: space-around;     
     margin-right: 3em;
+    box-sizing: border-box;
+}
+
+.thread_single_box {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 1.5em;
     box-sizing: border-box;
 }
 
@@ -34,13 +40,13 @@
     border-radius: 0.4em;
 }
 
+.button:disabled {
+    cursor: default;
+}
+
 .button:hover {
     transition-duration: 250ms;
     background-color: #1191ec;
-}
-
-#thread_base_info > div {
-    width: 100%;
 }
 
 #category_subcategory_box {
@@ -52,7 +58,11 @@
     align-items: space;
     justify-content: space-between;
     flex-direction: column;
-    height: 5vh;
+    min-height: 5vh;
+}
+
+#thread_title_controls button {
+    margin-top: 0.5em;
 }
 
 #thread_box_content {
@@ -111,8 +121,38 @@
 
 .thread_user_date_added {
     width: 100%;
-    text-align: right;
     margin-bottom: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.thread_user_date_added > div {
+    margin: 0.5em;
+}
+
+.thread_user_content_box_icon {
+    color: #e8e6e3;
+    background-color: #1265a1;
+    width: 2%;
+    text-align: center;
+    color: #cac6bf;
+    border-radius: 0.5em;
+    cursor: pointer;
+    padding: 0.2em;
+}
+
+.thread_user_content_box_icon_up_selected {    
+    background-color: #12a15e;
+}
+
+.thread_user_content_box_icon_down_selected {    
+    background-color: #aa452c;
+}
+
+.thread_user_content_box_icon:hover {
+    transition-duration: 250ms;
+    background-color: #1191ec;
 }
 
 blockquote {
@@ -136,4 +176,63 @@ blockquote > div:last-child {
     width: 100%;
     padding: 0.5em;
     box-sizing: border-box;
+}
+
+#post_creator_box {
+    margin-top: 2.5em;
+    height: 25vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#post_creator_box form {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#post_creator_box textarea {
+    width: 90%;
+    height: 90%;
+    color: #b8b3ac;
+    background-color: #2b2a2a;
+    border: 1px solid #333333;
+    border-radius: 0.5em;
+    padding: 1em;
+}
+
+#post_creator_box textarea:focus {
+    outline: none;
+    border-color: #5c5750;
+    box-shadow: 0 0 5px #5c5750;
+}
+
+#post_creator_box button {
+    width: 3%;
+    height: 15%;
+    margin-right: 2em;
+    box-sizing: border-box;
+}
+
+.up_button {
+    width: 9vw;
+    height: 6vh;
+}
+
+.post_creator_comment {
+    margin: 2em;
+}
+
+.post_creator_comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post_creator_comment > div {
+    font-size: 2vh;
 }

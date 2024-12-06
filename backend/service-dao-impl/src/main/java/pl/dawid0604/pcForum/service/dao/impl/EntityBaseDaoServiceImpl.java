@@ -25,8 +25,5 @@ public abstract class EntityBaseDaoServiceImpl<E extends EntityBase> implements 
         repository.deleteById(entityId);
     }
 
-    @Override
-    public E save(final E entity) {
-        return repository.save(entity);
-    }
+    public abstract E save(E entity);
 }

@@ -10,6 +10,8 @@ import pl.dawid0604.pcForum.service.dao.user.UserProfileDaoService;
 
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 @Service
 class UserProfileDaoServiceImpl extends EntityBaseDaoServiceImpl<UserProfileEntity>
                                 implements UserProfileDaoService {
@@ -25,12 +27,6 @@ class UserProfileDaoServiceImpl extends EntityBaseDaoServiceImpl<UserProfileEnti
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<String> findNicknameById(final String encryptedUserProfileId) {
-        return userProfileRepository.findNicknameById(encryptionService.decryptId(encryptedUserProfileId));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Optional<UserProfileEntity> findBaseInfo(final String username) {
         return userProfileRepository.findBaseInfoByUsername(username);
     }
@@ -38,11 +34,41 @@ class UserProfileDaoServiceImpl extends EntityBaseDaoServiceImpl<UserProfileEnti
     @Override
     @Transactional(readOnly = true)
     public Optional<UserProfileEntity> findByUsername(final String username) {
-        return userProfileRepository.findByUsername(username);
+        return userProfileRepository.findIdByUsername(username);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<String> findEncryptedIdByUsername(final String username) {
+        return userProfileRepository.findEncryptedIdByUsername(username);
     }
 
     @Override
     public boolean existsByNickname(final String nickname) {
         return userProfileRepository.existsByNicknameIgnoreCase(nickname);
+    }
+
+    @Override
+    @Transactional
+    public UserProfileEntity save(UserProfileEntity user) {
+        if(isNotBlank(user.getEncryptedId())) {
+            return userProfileRepository.save(user);
+        }
+
+        user = userProfileRepository.save(user);
+        user.setEncryptedId(encryptionService.encryptUserProfile(user.getId()));
+        return userProfileRepository.save(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<UserProfileEntity> findByIdWithoutFields(final String loggedUserEncryptedId) {
+        return userProfileRepository.findIdByIdWithoutFields(encryptionService.decryptId(loggedUserEncryptedId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<UserProfileEntity> findDetailsInfo(final String userProfileEncryptedId) {
+        return userProfileRepository.findDetailsInfoByUsername(encryptionService.decryptId(userProfileEncryptedId));
     }
 }

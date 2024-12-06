@@ -1,0 +1,96 @@
+.box {
+    width: 95vw;
+    min-height: 80vh;
+    text-align: center;
+}
+
+#up_box {
+    height: 15vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#up_box_background {
+    height: 90%;    
+    width: 100%;
+    background-image: url('../../../../public/profile_default_background.webp');
+    background-size: cover;
+    background-position: center;
+}
+
+#up_box_info {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;    
+}
+
+#down_left_box {
+    width: 20%;    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #202324;    
+}
+
+#down_left_user_avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5em;
+    box-sizing: border-box;
+}
+
+#down_left_user_avatar img {
+    width: 45%;
+    border-radius: 50%;
+}
+
+#down_box {
+    display: flex;    
+    justify-content: space-between;
+    padding: 2em;
+    box-sizing: border-box;
+}
+
+#down_center_box {
+    width: 75%;        
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #202324;    
+}
+
+#down_center_controls {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#down_center_box {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em;
+    box-sizing: border-box;        
+}
+
+.last-activity-item_box {
+    margin-top: 1.5em;
+}
+
+#down_left_controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+}
+
+#down_left_controls button {
+    margin: 0.5em;
+}

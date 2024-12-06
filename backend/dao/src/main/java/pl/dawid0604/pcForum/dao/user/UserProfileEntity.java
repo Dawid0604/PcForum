@@ -65,6 +65,17 @@ public class UserProfileEntity extends EntityBase {
     }
 
     @SuppressWarnings("unused")
+    public UserProfileEntity(final String nickname) {
+        this.nickname = nickname;
+    }
+
+    @SuppressWarnings("unused")
+    public UserProfileEntity(final long id, final String encryptedId) {
+        super(encryptedId);
+        this.id = id;
+    }
+
+    @SuppressWarnings("unused")
     public UserProfileEntity(final String encryptedId, final String avatar, final String nickname) {
         super(encryptedId);
         this.avatar = avatar;
@@ -78,6 +89,20 @@ public class UserProfileEntity extends EntityBase {
         super(encryptedId);
         this.avatar = avatar;
         this.nickname = nickname;
+        this.rank = rank;
+    }
+
+    @SuppressWarnings("unused")
+    public UserProfileEntity(final String encryptedId, final String avatar, final LocalDateTime createdAt,
+                             final String nickname, final LocalDateTime lastActivity, final boolean isOnline,
+                             final UserProfileRankEntity rank) {
+
+        super(encryptedId);
+        this.avatar = avatar;
+        this.createdAt = createdAt;
+        this.nickname = nickname;
+        this.lastActivity = lastActivity;
+        this.isOnline = isOnline;
         this.rank = rank;
     }
 }

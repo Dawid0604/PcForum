@@ -25,4 +25,12 @@ public interface ThreadDaoService {
     List<ThreadEntity> findMostPopularThreads(int size);
 
     ThreadEntity save(ThreadEntity thread);
+
+    Optional<ThreadEntity> findByIdWithoutFields(String encryptedThreadId);
+
+    void closeThread(String encryptedThreadId);
+
+    void deleteThread(String encryptedThreadId);
+
+    long countThreadsByUser(String encryptedUserId);
 }

@@ -37,8 +37,8 @@
                         <label for="title">Title</label>
                         <input [(ngModel)]="form.title" name="title" #title="ngModel" required name="title" type="text" placeholder="Enter your title">
                     </div>
-                    
-                    <div class="thread_content_box">
+                                        
+                    <div class="thread_content_box">                    
                         <textarea [(ngModel)]="form.content" name="content" #content="ngModel" required placeholder="Describe your problem"></textarea>
                     </div>
                 </div>
@@ -98,85 +98,26 @@
             </div>
 
             <div id="left_side_activity_controls">
-                <button class="activity_button">Week</button>
-                <button class="activity_button">Month</button>
-                <button class="activity_button">Annually</button>
-                <button class="activity_button">All the time</button>
+                <button class="activity_button" [ngClass]="weekActivityModeIsSelected ? 'activity_button activity_button_selected' : 'activity_button'" (click)="selectWeekActivityMode()">Week</button>
+                <button class="activity_button" [ngClass]="monthActivityModeIsSelected ? 'activity_button activity_button_selected' : 'activity_button'" (click)="selectMonthActivityMode()">Month</button>
+                <button class="activity_button" [ngClass]="annuallyActivityModeIsSelected ? 'activity_button activity_button_selected' : 'activity_button'" (click)="selectAnnuallyActivityMode()">Annually</button>
+                <button class="activity_button" [ngClass]="allTheTimeActivityModeIsSelected ? 'activity_button activity_button_selected' : 'activity_button'" (click)="selectAllTheTimeActivityMode()">All the time</button>
             </div>
 
             <div id="left_side_activity_users">
-                <div class="left_side_activity_user_item">
-                    <div class="left_side_activity_user_place">
-                        <p>1</p>
+                <div class="left_side_row_item" *ngFor="let user of activityUsers">
+                    <div class="row_user_icon">
+                        <div>
+                            <img style="width: 40%;" [src]="user.avatar" [routerLink]="[ '/user', user.encryptedId, user.nickname]">
+                        </div>
                     </div>
-
-                    <div class="left_side_activity_user_avatar">
-                        <p>#</p>
-                    </div>
-
-                    <div class="left_side_activity_user_info">
-                        <h1>UserXyz3</h1>
-                        <h5>+250</h5>
-                    </div>
-                </div>
-
-                <div class="left_side_activity_user_item">
-                    <div class="left_side_activity_user_place">
-                        <p>2</p>
-                    </div>
-
-                    <div class="left_side_activity_user_avatar">
-                        <p>#</p>
-                    </div>
-
-                    <div class="left_side_activity_user_info">
-                        <h1>UserXyz2</h1>
-                        <h5>+150</h5>
-                    </div>
-                </div>
-
-                <div class="left_side_activity_user_item">
-                    <div class="left_side_activity_user_place">
-                        <p>3</p>
-                    </div>
-
-                    <div class="left_side_activity_user_avatar">
-                        <p>#</p>
-                    </div>
-
-                    <div class="left_side_activity_user_info">
-                        <h1>UserXyz3</h1>
-                        <h5>+100</h5>
-                    </div>
-                </div>
-
-                <div class="left_side_activity_user_item">
-                    <div class="left_side_activity_user_place">
-                        <p>4</p>
-                    </div>
-
-                    <div class="left_side_activity_user_avatar">
-                        <p>#</p>
-                    </div>
-
-                    <div class="left_side_activity_user_info">
-                        <h1>UserXyz4</h1>
-                        <h5>+50</h5>
-                    </div>
-                </div>
-
-                <div class="left_side_activity_user_item">
-                    <div class="left_side_activity_user_place">
-                        <p>5</p>
-                    </div>
-
-                    <div class="left_side_activity_user_avatar">
-                        <p>#</p>
-                    </div>
-
-                    <div class="left_side_activity_user_info">
-                        <h1>UserXyz5</h1>
-                        <h5>+5</h5>
+    
+                    <div class="left_side_row_post" style="padding-top: 1em;">
+                        <h3>                            
+                            <fa-icon [icon]="upVoteIcon" style="color: #54a120;"></fa-icon>
+                            {{user.numberOfUpVotes}} &nbsp;
+                            {{user.nickname}} 
+                        </h3>                                            
                     </div>
                 </div>
             </div>

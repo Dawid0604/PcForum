@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { RequestInterceptor } from './interceptor/request.interceptor';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ThreadCreatorComponent } from './components/thread-creator/thread-creator.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ThreadCreatorComponent } from './components/thread-creator/thread-creat
     SingleThreadComponent,
     LoginComponent,
     RegisterComponent,
-    ThreadCreatorComponent
+    ThreadCreatorComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,

@@ -6,6 +6,4 @@ public interface EntityBaseDaoService<B extends EntityBase> {
     void updateEncryptedId(long entityId, String encryptedId);
 
     void delete(long entityId);
-
-    B save(B entity);
 }

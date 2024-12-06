@@ -3,6 +3,7 @@ package pl.dawid0604.pcForum.service.impl.thread;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.data.domain.Page;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -211,6 +212,16 @@ class ThreadRestServiceImpl implements ThreadRestService {
                                .toList();
     }
 
+    @Override
+    public void closeThread(final String encryptedThreadId) {
+        threadDaoService.closeThread(encryptedThreadId);
+    }
+
+    @Override
+    public void deleteThread(final String encryptedThreadId) {
+        threadDaoService.deleteThread(encryptedThreadId);
+    }
+
     private MostPopularThreadDTO mapMostPopularThread(final ThreadEntity threadEntity) {
         var user = new UserProfileDTO(threadEntity.getUserProfile().getEncryptedId(), threadEntity.getUserProfile().getNickname(),
                                       threadEntity.getUserProfile().getAvatar());
@@ -228,6 +239,19 @@ class ThreadRestServiceImpl implements ThreadRestService {
 
     @Transactional(readOnly = true)
     private ThreadDetailsDTO mapThreadDetails(final ThreadEntity threadEntity) {
+        boolean isLoggedUserThread = false;
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(!(authentication instanceof AnonymousAuthenticationToken)) {
+            var loggedUserUsername = ((User) authentication.getPrincipal())
+                                                           .getUsername();
+
+            String loggedUserEncryptedId = userProfileDaoService.findEncryptedIdByUsername(loggedUserUsername)
+                                                                .orElseThrow();
+
+            isLoggedUserThread = threadEntity.getUserProfile().getEncryptedId().equals(loggedUserEncryptedId);
+        }
+
         UserProfileDTO threadAuthor = new UserProfileDTO(threadEntity.getUserProfile().getEncryptedId(), threadEntity.getUserProfile().getNickname(),
                                                          threadEntity.getUserProfile().getAvatar(), threadEntity.getUserProfile().getRank().getName(),
                                                          postDaoService.countPostsByUser(threadEntity.getUserProfile().getEncryptedId()),
@@ -235,7 +259,7 @@ class ThreadRestServiceImpl implements ThreadRestService {
                                                          postReactionDaoService.countDownVotesByUser(threadEntity.getUserProfile().getEncryptedId()));
 
         String subCategoryName = null;
-        String categoryName = threadCategoryDaoService.findCategoryName(threadEntity.getCategoryLevelPathOne(), null, null)
+        String categoryName = threadCategoryDaoService.findCategoryName(threadEntity.getCategoryLevelPathOne(), threadEntity.getCategoryLevelPathTwo(), null)
                                                       .orElseThrow();
 
         if(threadEntity.getCategoryLevelPathTwo() != null) {
@@ -245,7 +269,7 @@ class ThreadRestServiceImpl implements ThreadRestService {
 
         return new ThreadDetailsDTO(threadEntity.getEncryptedId(), threadEntity.getTitle(), threadEntity.getContent(), formatDate(threadEntity.getCreatedAt()),
                                     formatDate(threadEntity.getLastUpdatedAt()), formatDate(threadEntity.getLastActivity()),
-                                    threadEntity.isClosed(), threadAuthor, categoryName, subCategoryName);
+                                    threadEntity.isClosed(), threadAuthor, categoryName, subCategoryName, isLoggedUserThread);
     }
 
     @Transactional(readOnly = true)

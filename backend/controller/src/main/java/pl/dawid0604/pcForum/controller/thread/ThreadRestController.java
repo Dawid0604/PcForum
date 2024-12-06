@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.dawid0604.pcForum.dto.thread.NewThreadDTO;
 import pl.dawid0604.pcForum.service.thread.ThreadRestService;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -57,9 +58,21 @@ public class ThreadRestController {
         return new ResponseEntity<>(threadRestService.create(payload), OK);
     }
 
-    @ResponseStatus(OK)
-    @PatchMapping("/thread/handle/view/{encryptedId}")
+    @ResponseStatus(NO_CONTENT)
+    @PatchMapping("/thread/{encryptedId}/handle/view")
     public void handleThreadView(@PathVariable("encryptedId") final String encryptedThreadId) {
         threadRestService.handleThreadView(encryptedThreadId);
+    }
+
+    @ResponseStatus(NO_CONTENT)
+    @PatchMapping("/thread/{encryptedId}/close")
+    public void closeThread(@PathVariable("encryptedId") final String encryptedThreadId) {
+        threadRestService.closeThread(encryptedThreadId);
+    }
+
+    @ResponseStatus(NO_CONTENT)
+    @DeleteMapping("/thread/{encryptedId}")
+    public void deleteThread(@PathVariable("encryptedId") final String encryptedThreadId) {
+        threadRestService.deleteThread(encryptedThreadId);
     }
 }

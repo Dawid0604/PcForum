@@ -23,7 +23,7 @@ export class ThreadService {
   }
 
   public handleThreadView(threadId: string): Observable<any> {
-    return this.httpClient.patch(`${this.API}/thread/handle/view/${threadId}`, { });
+    return this.httpClient.patch(`${this.API}/thread/${threadId}/handle/view`, { });
   }
 
   public findMostPopularThreads(): Observable<MostPopularThreadDTO[]> {
@@ -32,5 +32,13 @@ export class ThreadService {
 
   public create(payload: any): Observable<any> {
     return this.httpClient.post<any>(`${this.API}/thread/create`, payload);
+  }
+
+  public close(threadId: string): Observable<any> {
+    return this.httpClient.patch<any>(`${this.API}/thread/${threadId}/close`, { });
+  }
+
+  public delete(threadId: string): Observable<any> {
+    return this.httpClient.delete<any>(`${this.API}/thread/${threadId}`);
   }
 }

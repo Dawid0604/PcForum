@@ -8,6 +8,8 @@ import pl.dawid0604.pcForum.dao.post.PostEntity;
 import pl.dawid0604.pcForum.repository.EntityBaseRepository;
 import pl.dawid0604.pcForum.repository.post.custom.PostRepositoryCustom;
 
+import java.util.Optional;
+
 @Repository
 public interface PostRepository extends EntityBaseRepository<PostEntity>, PostRepositoryCustom {
 
@@ -48,4 +50,20 @@ public interface PostRepository extends EntityBaseRepository<PostEntity>, PostRe
                   (:categoryLevelPathThree IS NULL OR t.categoryLevelPathThree = :categoryLevelPathThree)
            """)
     long countByCategory(int categoryLevelPathOne, Integer categoryLevelPathTwo, Integer categoryLevelPathThree);
+
+    @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.post.PostEntity(p.id)
+            FROM #{#entityName} p
+            WHERE p.id = :postId
+           """)
+    Optional<PostEntity> findByIdWithoutFields(long postId);
+
+    @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.post.PostEntity(p.content, new pl.dawid0604.pcForum.dao.user.UserProfileEntity(u.nickname),
+                                                                p.createdAt)
+            FROM #{#entityName} p
+            LEFT JOIN p.userProfile u
+            WHERE p.id = :postId
+           """)
+    Optional<PostEntity> findContentById(long postId);
 }

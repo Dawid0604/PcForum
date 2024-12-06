@@ -63,4 +63,23 @@ public interface ThreadRepository extends EntityBaseRepository<ThreadEntity>, Th
     @Transactional
     @Query("UPDATE #{#entityName} t SET t.numberOfViews = t.numberOfViews + 1 WHERE t.id = :threadId")
     void updateThreadNumberOfViews(long threadId);
+
+    @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.thread.ThreadEntity(t.id)
+            FROM #{#entityName} t
+            WHERE t.id = :threadId
+           """)
+    Optional<ThreadEntity> findByIdWithoutFields(long threadId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE #{#entityName} t SET t.isClosed = true WHERE t.id = :threadId")
+    void setThreadAsClosed(long threadId);
+
+    @Query("""
+            SELECT COUNT(t)
+            FROM #{#entityName} t
+            WHERE t.userProfile.id = :userId
+           """)
+    long countThreadsByUser(long userId);
 }

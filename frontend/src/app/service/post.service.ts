@@ -20,4 +20,12 @@ export class PostService {
   public findNewestPosts(): Observable<NewestPostDTO[]> {
     return this.httpClient.get<NewestPostDTO[]>(`${this.API}/newest`);
   }
+
+  public create(payload: any): Observable<any> {
+    return this.httpClient.post<any>(`${this.API}/create`, payload);
+  }
+
+  public delete(postId: string): Observable<any> {
+    return this.httpClient.delete<any>(`${this.API}/${postId}`);
+  }
 }

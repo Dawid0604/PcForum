@@ -1,0 +1,141 @@
+<main>
+    <section class="box">
+        <div id="up_box">
+            <div id="up_box_background"></div>
+
+            <div id="up_box_info">
+                <p></p>
+                <p>{{userProfile.numberOfPosts}} posts&nbsp;|&nbsp;{{userProfile.numberOfThreads}} threads</p>
+                <p>Joined: {{userProfile.createdAt}}</p>
+                <p>Last online: 
+                    @if(userProfile.lastActivity) {
+                        {{userProfile.lastActivity}}
+
+                    } @else {
+                        long ago
+                    }
+                </p>
+            </div>
+        </div>
+
+        <div id="down_box">
+            <div id="down_left_box">
+                <div id="down_left_user_avatar">
+                    <img [src]="userProfile.avatar">
+                </div>
+
+                <div>
+                    <h2>{{userProfile.nickname}}</h2>
+                    <h5>{{userProfile.rank}}</h5>
+                </div>
+
+                <div>
+                    <p>
+                        {{userProfile.numberOfUpVotes}} <fa-icon [icon]="likeIcon"></fa-icon> &nbsp;
+                        {{userProfile.numberOfDownVotes}} <fa-icon [icon]="dislikeIcon"></fa-icon>
+                    </p>
+
+                    <p>
+                        <fa-icon [icon]="followerIcon"></fa-icon>&nbsp;{{userProfile.numberOfFollowers}} followers
+                    </p>
+
+                    <p>
+                        <fa-icon [icon]="visitIcon"></fa-icon>&nbsp;
+                        {{userProfile.numberOfVisits}} visits
+                    </p>
+                </div>
+                
+                <div id="down_left_controls">
+                    <button class="up_button" title="Show threads">
+                        <fa-icon [icon]="threadsIcon"></fa-icon>
+                    </button>
+
+                    <button class="up_button" title="Show posts">
+                        <fa-icon [icon]="postsIcon"></fa-icon>
+                    </button>
+
+                    <button class="up_button" title="Show followers">
+                        <fa-icon [icon]="followerIcon"></fa-icon>
+                    </button>
+
+                    <button class="up_button" title="Show visitors">
+                        <fa-icon [icon]="visitIcon"></fa-icon>
+                    </button>
+
+                    <button class="up_button" [title]="isUserLoggedIn ? 'Write message' : 'Log in to write message'" [disabled]="!isUserLoggedIn">
+                        <fa-icon [icon]="messageIcon"></fa-icon>
+                    </button>
+                </div>
+            </div>        
+
+            <div id="down_center_box">
+                <div class="last-activity-item_box">
+                    <div class="last_activity_left">                        
+                        <p>
+                            <fa-icon [icon]="followerIcon"></fa-icon>                            
+                            <span style="font-size: small;">&nbsp; 5 minutes ago</span>
+                        </p>
+                    </div>
+
+                    <div class="last_activity_content">
+                        User <b>Tomcio Paluch</b> is being followed                        
+                    </div>
+                </div>
+
+                <div class="last-activity-item_box">
+                    <div class="last_activity_left">                        
+                        <p>
+                            <fa-icon [icon]="threadsIcon"></fa-icon>              
+                            <span style="font-size: small;">&nbsp; 5 hours ago</span>              
+                        </p>
+                    </div>
+
+                    <div class="last_activity_content">
+                        <h3>New thread has been created</h3>                    
+                        
+                        <div>
+                            <p>Hello, should I choose fx 4100?</p>
+                            <p>I do not know what should i choose</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="last-activity-item_box">
+                    <div class="last_activity_left">                        
+                        <p>
+                            <fa-icon [icon]="postsIcon"></fa-icon>    
+                            <span style="font-size: small;">&nbsp; 2 days ago</span>                        
+                        </p>
+                    </div>
+
+                    <div class="last_activity_content">
+                        <h3>Thread has been commented</h3>
+                        
+                        <div>
+                            <p>Hello, should I choose fx 4100?</p>
+                            <p>Yes, you should choose this processor but I think that fx6300 is more profitable</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="last-activity-item_box">
+                    <div class="last_activity_left">                        
+                        <p>
+                            <fa-icon [icon]="threadsIcon"></fa-icon>     
+                            <span style="font-size: small;">&nbsp; 12.05.2024</span>                       
+                        </p>
+                    </div>
+
+                    <div class="last_activity_content">
+                        <h3>New thread has been created</h3>
+                        
+                        <div>
+                            <p>Hello, should I choose fx 4100?</p>
+                            <p>I do not know what should i choose</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
