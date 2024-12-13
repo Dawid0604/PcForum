@@ -11,12 +11,10 @@ import pl.dawid0604.pcForum.dao.user.UserEntity;
 import pl.dawid0604.pcForum.dao.user.UserEntityRole;
 import pl.dawid0604.pcForum.dao.user.UserProfileEntity;
 import pl.dawid0604.pcForum.dao.user.UserProfileRankEntity;
-import pl.dawid0604.pcForum.dto.user.ActivitySummaryDTO;
-import pl.dawid0604.pcForum.dto.user.UserProfileDTO;
-import pl.dawid0604.pcForum.dto.user.UserProfileDetailsDTO;
-import pl.dawid0604.pcForum.dto.user.UserRegistartionDTO;
+import pl.dawid0604.pcForum.dto.user.*;
 import pl.dawid0604.pcForum.service.dao.post.PostDaoService;
 import pl.dawid0604.pcForum.service.dao.post.PostReactionDaoService;
+import pl.dawid0604.pcForum.service.dao.session.SpringSessionDaoService;
 import pl.dawid0604.pcForum.service.dao.thread.ThreadDaoService;
 import pl.dawid0604.pcForum.service.dao.user.*;
 import pl.dawid0604.pcForum.service.user.UserProfileRestService;
@@ -43,6 +41,7 @@ class UserProfileRestServiceImpl implements UserProfileRestService {
     private final UserProfileVisitorDaoService userProfileVisitorDaoService;
     private final UserProfileObservationDaoService userProfileObservationDaoService;
     private final UserDaoService userDaoService;
+    private final SpringSessionDaoService springSessionDaoService;
 
     @Override
     public UserProfileDTO getUserProfileBaseInfo() {
@@ -111,8 +110,8 @@ class UserProfileRestServiceImpl implements UserProfileRestService {
         var activities = mapActivities(userProfile.getEncryptedId());
 
         return new UserProfileDetailsDTO(userProfile.getAvatar(), userProfile.getNickname(), userProfile.getRank().getName(), formatDate(userProfile.getCreatedAt()),
-                                        formatDate(userProfile.getLastActivity()), numberOfPosts, numberOfThreads, numberOfUpVotes, numberOfDownVotes, numberOfVisits,
-                                        numberOfFollowers, activities, isLoggedUser, userProfile.isOnline());
+                                         formatDate(userProfile.getLastActivity()), numberOfPosts, numberOfThreads, numberOfUpVotes, numberOfDownVotes, numberOfVisits,
+                                         numberOfFollowers, activities, isLoggedUser, userProfile.isOnline());
     }
 
     @Override
@@ -131,6 +130,14 @@ class UserProfileRestServiceImpl implements UserProfileRestService {
                                           .toList();
 
         return new ActivitySummaryDTO(users);
+    }
+
+    @Override
+    public UsersDTO getNumberOfOnlineUsers() {
+        var onlineUsers = springSessionDaoService.findOnlineUsers();
+
+        userProfileDaoService.setAsOnline(onlineUsers);
+        return new UsersDTO(userProfileDaoService.count(), onlineUsers.size());
     }
 
     @Transactional(readOnly = true)

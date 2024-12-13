@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.dawid0604.pcForum.dto.user.ActivitySummaryDTO;
 import pl.dawid0604.pcForum.dto.user.UserRegistartionDTO;
+import pl.dawid0604.pcForum.dto.user.UsersDTO;
 import pl.dawid0604.pcForum.service.user.UserProfileRestService;
 import pl.dawid0604.pcForum.service.user.UserProfileVisitorRestService;
 import pl.dawid0604.pcForum.utils.constants.ActivitySummarySortType;
@@ -47,4 +48,11 @@ public class UserRestController {
 
         return userProfileRestService.getActivitySummary(summarySortType, numberOfUsers);
     }
+
+    @ResponseStatus(OK)
+    @GetMapping("/users/online")
+    public UsersDTO getNumberOfOnlineUsers() {
+        return userProfileRestService.getNumberOfOnlineUsers();
+    }
+
 }

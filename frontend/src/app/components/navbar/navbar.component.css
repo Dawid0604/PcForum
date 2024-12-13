@@ -47,7 +47,7 @@ nav {
     color: #e8e6e3;
     background-color: #1265a1;
     border: none;
-    width: 20%;
+    width: 18%;
     cursor: pointer;
     border-radius: 0.4em;
     display: flex;
@@ -116,4 +116,13 @@ nav {
 #browser button:hover {
     transition-duration: 250ms;
     background-color: #1191ec;
+}
+
+#up_button_notification_active {
+    color: rgb(255, 183, 44);
+}
+
+a {
+    text-decoration: none;
+    color: #e8e6e3;
 }

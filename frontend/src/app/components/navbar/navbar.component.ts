@@ -4,7 +4,9 @@ import { Router } from '@angular/router';
 import { AuthorizationService } from '../../service/authorization.service';
 import { UserProfileService } from '../../service/user-profile.service';
 import { UserProfileDTO } from '../../model/UserProfileDTO';
-import { faBars, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faBell, faCircle, faPlus, faUserGroup } from '@fortawesome/free-solid-svg-icons'
+import { interval, Subscription, switchMap } from 'rxjs';
+import { UsersDTO } from '../../model/UsersDTO';
 
 @Component({
   selector: 'app-navbar',
@@ -14,10 +16,18 @@ import { faBars, faPlus } from '@fortawesome/free-solid-svg-icons'
 export class NavbarComponent implements OnInit {
   isUserLoggedIn: boolean = false;
   loggedUser: UserProfileDTO = { } as UserProfileDTO;
-
+  userNotifications: any[] = [];
+  users: UsersDTO = { } as UsersDTO;
+  
+  onlineIcon = faCircle;
   accountSettingsIcon = faBars;
   newThreadIcon = faPlus;
+  notificationIcon = faBell;
+  usersIcon = faUserGroup;
+  form: any = { };
   
+  private numberOfOnlineUsersSubscription!: Subscription;
+
   constructor(private sessionService: SessionService,
               private authorizationService: AuthorizationService,
               private userProfileService: UserProfileService,
@@ -38,6 +48,25 @@ export class NavbarComponent implements OnInit {
                 })
           }
         });
+
+    this.userProfileService
+        .getNumberOfOnlineUsers()
+        .subscribe({
+          next: _res => this.users = _res,
+          error: _err => console.log(_err)
+        })
+  
+    this.numberOfOnlineUsersSubscription = interval(30_000).pipe(switchMap(() => this.userProfileService.getNumberOfOnlineUsers()))
+                                                           .subscribe({
+                                                             next: _res => this.users = _res,
+                                                             error: _err => console.log(_err)
+                                                           });                     
+  }
+
+  ngOnDestroy(): void {
+    if(this.numberOfOnlineUsersSubscription) {
+      this.numberOfOnlineUsersSubscription.unsubscribe();
+    }
   }
 
   logout() {
@@ -53,5 +82,12 @@ export class NavbarComponent implements OnInit {
             console.log(_err);
           }
         })
+  }
+
+  browse() {
+    if(this.form.text && (this.form.text as string).length >= 3) {
+      this.router.navigate([ "/browser", this.form.text ]);
+      this.form.text = "";
+    }
   }
 }

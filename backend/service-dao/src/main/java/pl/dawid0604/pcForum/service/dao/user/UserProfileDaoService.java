@@ -2,6 +2,7 @@ package pl.dawid0604.pcForum.service.dao.user;
 
 import pl.dawid0604.pcForum.dao.user.UserProfileEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserProfileDaoService {
@@ -18,4 +19,8 @@ public interface UserProfileDaoService {
     Optional<UserProfileEntity> findByIdWithoutFields(String loggedUserEncryptedId);
 
     Optional<UserProfileEntity> findDetailsInfo(String userProfileEncryptedId);
+
+    void setAsOnline(List<String> onlineUsers);
+
+    long count();
 }

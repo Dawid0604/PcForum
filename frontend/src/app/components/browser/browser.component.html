@@ -1,0 +1,114 @@
+<main>
+    <section id="posts_box" class="box">
+        <div id="selected_category">
+            <h2><b>Searching phrase:</b>&nbsp;<i>{{searchedText}}</i></h2>
+        </div>
+
+        <div id="selected_category_rows_box">
+            <div class="row_item" *ngFor="let thread of foundResults.foundThreads">
+                <div class="row_icon" title="Thread">
+                    <fa-icon [icon]="threadsIcon"></fa-icon>
+                </div>
+
+                <div class="row_title_desc_box">
+                    <a [routerLink]="[ '/thread', thread.encryptedId, thread.title]" class="row_item_thread_post">
+                        <span>{{thread.title}}<br> By: {{thread.authorNickname}}</span>
+
+                        @if(thread.lastActivityDate) {
+                            <span>,&nbsp;{{thread.lastActivityDate}}</span>
+                        }
+
+                        @if(thread.categoryName) {
+                            <span>,&nbsp;{{thread.categoryName}}</span>
+                        }
+                    </a>                
+                </div>
+                
+                <div class="row_stats">
+                    <p>{{thread.numberOfPosts}} posts</p>
+                    <p>{{thread.numberOfViews}} views</p>
+                </div>
+
+                @if (thread.newestPost) {                                        
+                    <div class="row_last_post_box">
+                        <div class="row_user_icon">
+                            <img [src]="thread.newestPost.authorAvatar" title="Enter to user profile" [routerLink]="[ '/user', thread.newestPost.authorEncryptedId, thread.newestPost.authorNickname]">
+                        </div>
+    
+                        <div class="row_last_post">
+                            <h5>By {{thread.newestPost.authorNickname}},&nbsp; {{thread.newestPost.createdAt}}</h5>
+                        </div>                      
+                    </div>
+
+                } @else {                    
+                    <div class="row_last_post_box">
+                        <div class="row_user_icon">
+                            @if (thread.newestPost) {
+                                <p>?</p>
+                            }
+                        </div>
+
+                        <div class="row_last_post">
+                            <h5>Currently no posts</h5>
+                        </div>                          
+                    </div>
+                }   
+            </div>
+
+            <div class="row_item" *ngFor="let post of foundResults.foundPosts">
+                <div class="row_icon" title="Post">
+                    <fa-icon [icon]="postsIcon"></fa-icon>
+                </div>
+
+                <div class="row_title_desc_box">
+                    <a [routerLink]="[ '/thread', post.thread.encryptedId, post.thread.title]" class="row_item_thread_post">                        
+                        <span>{{post.thread.title}}</span>
+                    </a>
+
+                    <div class="thread_user_content">
+                        <div *ngFor="let contentFragment of post.content">                    
+                            @if(contentFragment.meta) {
+                                <blockquote>
+                                    <div> User <b>{{contentFragment.meta.authorNickname}}</b> wrote at <b>{{contentFragment.meta.dateAdded}}</b></div>
+                                    <div [innerHTML]="contentFragment.content"></div>
+                                </blockquote>
+                            
+                            } @else {
+                                <p [innerHTML]="contentFragment.content"></p>
+                            }
+                        </div>                    
+                    </div>
+                </div>
+
+                <div class="row_stats"></div>
+
+                <div class="row_last_post_box">
+                    <div class="row_user_icon">
+                        <img [src]="post.user.avatar" title="Enter to user profile" [routerLink]="[ '/user', post.user.encryptedId, post.user.nickname]">
+                    </div>  
+
+                    <div class="row_last_post">
+                        <h5>By {{post.user.nickname}},&nbsp; {{post.createdAt}}</h5>
+                    </div>            
+                </div>
+            </div>
+
+            <div class="row_item" *ngFor="let user of foundResults.foundUserProfiles">
+                <div class="row_icon" title="User profile">
+                    <fa-icon [icon]="userProfileIcon"></fa-icon>
+                </div>
+            
+                <div class="row_last_post_box">                    
+                    <div class="row_user_icon">
+                        <img [src]="user.avatar" title="Enter to user profile" [routerLink]="[ '/user', user.encryptedId, user.nickname]">
+                    </div>  
+
+                    <h5>{{user.nickname}}</h5>                    
+                </div>
+
+                <div class="row_title_desc_box"></div>
+            </div>
+
+        </div>
+    </section>
+</main>

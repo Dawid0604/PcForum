@@ -130,7 +130,7 @@ export class ThreadCreatorComponent {
 
   create() {
     const payload = {
-      encryptedCategoryId: this.form.subCategory,
+      encryptedCategoryId: (this.form.subCategory ? this.form.subCategory : this.form.category),
       title: this.form.title,
       content: this.form.content
     };

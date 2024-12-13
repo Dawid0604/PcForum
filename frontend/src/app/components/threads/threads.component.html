@@ -80,7 +80,11 @@
 
                 <div class="row_title_desc_box">
                     <a [routerLink]="[ '/thread', thread.encryptedId, thread.title]" class="row_item_thread_post">
-                        {{ thread.title }}<br> By: {{thread.authorNickname}}, &nbsp;{{thread.lastActivityDate}}
+                        <span>{{thread.title}}<br> By: {{thread.authorNickname}}</span>
+
+                        @if(thread.lastActivityDate) {
+                            <span>,&nbsp;{{thread.lastActivityDate}}</span>
+                        }
 
                         @if(thread.categoryName && thread.categoryName !== groupedThreadCategory.name) {
                             <span>,&nbsp;{{thread.categoryName}}</span>
@@ -104,8 +108,7 @@
                         </div>                      
                     </div>
 
-                } @else {
-                    
+                } @else {                    
                     <div class="row_last_post_box">
                         <div class="row_user_icon">
                             @if (thread.newestPost) {

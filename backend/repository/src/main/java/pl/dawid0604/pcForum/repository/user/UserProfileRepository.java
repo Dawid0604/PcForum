@@ -1,10 +1,13 @@
 package pl.dawid0604.pcForum.repository.user;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import pl.dawid0604.pcForum.dao.user.UserProfileEntity;
 import pl.dawid0604.pcForum.repository.EntityBaseRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -50,4 +53,14 @@ public interface UserProfileRepository extends EntityBaseRepository<UserProfileE
             WHERE p.id = :userId
            """)
     Optional<UserProfileEntity> findDetailsInfoByUsername(long userId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE #{#entityName} p SET p.isOnline = true WHERE p.nickname IN :onlineUsers")
+    void setAsOnline(List<String> onlineUsers);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE #{#entityName} p SET p.isOnline = false WHERE :onlineUsers IS NULL OR p.nickname NOT IN :onlineUsers")
+    void setAsOffline(List<String> onlineUsers);
 }

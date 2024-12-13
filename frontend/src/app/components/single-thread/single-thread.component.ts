@@ -133,7 +133,6 @@ export class SingleThreadComponent {
                                                           error: _err => console.log(_err)
                                                           })
 
-
     this.usersActivityRefreshSubscription = interval(30_000).pipe(switchMap(() => this.userProfileService.getActivitySummary(this.activityMode)))
                                                             .subscribe({
                                                               next: _res => this.activityUsers = _res.users,

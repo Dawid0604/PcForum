@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { faCertificate, faCommentMedical, faComments, faEnvelope, faEye, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faCertificate, faCircle, faCommentMedical, faComments, faEnvelope, faEye, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { UserProfileDetailsDTO } from '../../model/UserProfileDetailsDTO';
 import { UserProfileService } from '../../service/user-profile.service';
 import { SessionService } from '../../service/session.service';
@@ -22,6 +22,7 @@ export class UserProfileComponent implements OnInit {
   postsIcon = faComments;
   threadsIcon = faCommentMedical;
   messageIcon = faEnvelope;
+  onlineIcon = faCircle;
 
   constructor(private titleSetter: Title,
               private sessionService: SessionService,

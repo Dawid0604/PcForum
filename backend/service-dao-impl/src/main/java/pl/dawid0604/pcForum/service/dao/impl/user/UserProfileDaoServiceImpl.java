@@ -8,6 +8,7 @@ import pl.dawid0604.pcForum.service.dao.encryption.EncryptionService;
 import pl.dawid0604.pcForum.service.dao.impl.EntityBaseDaoServiceImpl;
 import pl.dawid0604.pcForum.service.dao.user.UserProfileDaoService;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -70,5 +71,17 @@ class UserProfileDaoServiceImpl extends EntityBaseDaoServiceImpl<UserProfileEnti
     @Transactional(readOnly = true)
     public Optional<UserProfileEntity> findDetailsInfo(final String userProfileEncryptedId) {
         return userProfileRepository.findDetailsInfoByUsername(encryptionService.decryptId(userProfileEncryptedId));
+    }
+
+    @Override
+    @Transactional
+    public void setAsOnline(final List<String> onlineUsers) {
+        userProfileRepository.setAsOnline(onlineUsers);
+        userProfileRepository.setAsOffline(onlineUsers);
+    }
+
+    @Override
+    public long count() {
+        return userProfileRepository.count();
     }
 }

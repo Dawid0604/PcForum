@@ -8,6 +8,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { ThreadCreatorComponent } from './components/thread-creator/thread-creator.component';
 import { AuthorizationGuard } from './guard/authorization.guard';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { BrowserComponent } from './components/browser/browser.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,10 @@ const routes: Routes = [
   {
     path: "user/:ref/:nickname",
     component: UserProfileComponent
+  },
+  {
+    path: "browser/:text",
+    component: BrowserComponent
   }
 ];
 

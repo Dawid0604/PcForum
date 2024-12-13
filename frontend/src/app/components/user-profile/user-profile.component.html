@@ -26,7 +26,7 @@
 
                 <div>
                     <h2>{{userProfile.nickname}}</h2>
-                    <h5>{{userProfile.rank}}</h5>
+                    <h5>{{userProfile.rank}}</h5>                    
                 </div>
 
                 <div>
@@ -42,6 +42,16 @@
                     <p>
                         <fa-icon [icon]="visitIcon"></fa-icon>&nbsp;
                         {{userProfile.numberOfVisits}} visits
+                    </p>
+
+                    <p style="color: #54a120;" *ngIf="userProfile.isOnline">
+                        <fa-icon [icon]="onlineIcon"></fa-icon>&nbsp;
+                        Online
+                    </p>
+
+                    <p style="color: #c45033;" *ngIf="!userProfile.isOnline">
+                        <fa-icon [icon]="onlineIcon"></fa-icon>&nbsp;
+                        Offline
                     </p>
                 </div>
                 
@@ -62,7 +72,7 @@
                         <fa-icon [icon]="visitIcon"></fa-icon>
                     </button>
 
-                    <button class="up_button" [title]="isUserLoggedIn ? 'Write message' : 'Log in to write message'" [disabled]="!isUserLoggedIn">
+                    <button *ngIf="!userProfile.isLoggedUser" class="up_button" [title]="isUserLoggedIn ? 'Write message' : 'Log in to write message'" [disabled]="!isUserLoggedIn">
                         <fa-icon [icon]="messageIcon"></fa-icon>
                     </button>
                 </div>

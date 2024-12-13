@@ -19,6 +19,10 @@
                     <fa-icon [icon]="newThreadIcon"></fa-icon>
                 </button>
 
+                <button class="up_button" title="Notifications">
+                    <fa-icon [icon]="notificationIcon" [id]="userNotifications.length > 0 ? 'up_button_notification_active' : ''"></fa-icon>
+                </button>
+
                 <button class="up_button" title="Account settings">
                     <fa-icon [icon]="accountSettingsIcon"></fa-icon>
                 </button>
@@ -30,17 +34,32 @@
 
     <section id="down">
         <div id="controls">
-            <p>2045 users</p>
-            <p>115 online</p>
+            <p>
+               <fa-icon [icon]="usersIcon"></fa-icon>
+               {{users.numberOfUsers}} users
+            </p>
+
+            <p>
+               <fa-icon [icon]="onlineIcon" style="color: #54a120;"></fa-icon>
+               {{users.numberOfOnlineUsers}} online
+            </p>
+
             <div id="down_controls">
-                <button class="down_button">Dawid0604</button>
-                <button class="down_button">Project</button>            
+                <button class="down_button">
+                    <a href="https://github.com/Dawid0604" target="_blank">Dawid0604</a>                    
+                </button>
+
+                <button class="down_button">
+                    <a href="https://github.com/Dawid0604/PcForum" target="_blank">Project</a>
+                </button>            
             </div>
         </div>
         
         <div id="browser">
-            <input type="text" placeholder="Browse..">
-            <button>></button>
+            <form name="form" (ngSubmit)="browse()" #f="ngForm">
+                <input type="text" placeholder="Browse.." [(ngModel)]="form.text" #text="ngModel" required name="text">
+                <button type="submit">></button>
+            </form>
         </div>
     </section>
 </nav>

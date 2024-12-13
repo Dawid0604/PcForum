@@ -16,6 +16,7 @@ import { RequestInterceptor } from './interceptor/request.interceptor';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ThreadCreatorComponent } from './components/thread-creator/thread-creator.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { BrowserComponent } from './components/browser/browser.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     LoginComponent,
     RegisterComponent,
     ThreadCreatorComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    BrowserComponent
   ],
   imports: [
     BrowserModule,
