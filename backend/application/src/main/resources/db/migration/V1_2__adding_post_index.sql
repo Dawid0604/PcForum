@@ -1,1 +1,1 @@
-CREATE INDEX post_user_idx ON Posts (UserProfileId);
+CREATE INDEX IF NOT EXISTS post_user_idx ON Posts (UserProfileId);

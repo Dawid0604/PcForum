@@ -24,4 +24,6 @@ public interface PostDaoService {
     Optional<PostEntity> findByIdWithoutFields(String postEncryptedId);
 
     Optional<PostEntity> findContentAndUserById(String postEncryptedId);
+
+    List<PostEntity> findPostsByUser(String encryptedId);
 }

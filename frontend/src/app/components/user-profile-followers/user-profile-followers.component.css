@@ -1,0 +1,9 @@
+.row_stats {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.row_stats b {
+    margin-right: 0.75em;
+}

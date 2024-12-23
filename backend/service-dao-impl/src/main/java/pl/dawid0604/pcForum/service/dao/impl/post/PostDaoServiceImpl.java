@@ -93,4 +93,10 @@ class PostDaoServiceImpl extends EntityBaseDaoServiceImpl<PostEntity>
     public Optional<PostEntity> findContentAndUserById(final String postEncryptedId) {
         return postRepository.findContentById(encryptionService.decryptId(postEncryptedId));
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PostEntity> findPostsByUser(final String encryptedId) {
+        return postRepository.findPostsByUser(encryptionService.decryptId(encryptedId));
+    }
 }

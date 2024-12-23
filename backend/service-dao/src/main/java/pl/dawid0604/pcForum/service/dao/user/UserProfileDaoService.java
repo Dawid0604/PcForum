@@ -23,4 +23,6 @@ public interface UserProfileDaoService {
     void setAsOnline(List<String> onlineUsers);
 
     long count();
+
+    Optional<UserProfileEntity> findNicknameAvatarEncryptedIdById(String encryptedUserProfileId);
 }

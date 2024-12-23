@@ -1,0 +1,38 @@
+#posts_box {
+    width: 90%;
+}
+
+blockquote {
+    width: 35%;
+    padding: 0.5em;
+    box-sizing: border-box;
+    border: 1px solid #808080;
+    display: flex;
+    flex-direction: column;
+}
+
+blockquote > div:first-child {
+    width: 100%;
+    background-color: rgb(68, 66, 66);
+    padding: 0.3em;
+    color: #cac6bf;
+    box-sizing: border-box;
+}
+
+blockquote > div:last-child {
+    width: 100%;
+    padding: 0.5em;
+    box-sizing: border-box;
+}
+
+.row_icon {
+    font-size: x-large;
+}
+
+.thread_user_content {
+    font-size: small;
+}
+
+.row_icon {
+    cursor: pointer;
+}

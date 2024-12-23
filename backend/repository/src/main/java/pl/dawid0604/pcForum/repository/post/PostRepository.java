@@ -8,6 +8,7 @@ import pl.dawid0604.pcForum.dao.post.PostEntity;
 import pl.dawid0604.pcForum.repository.EntityBaseRepository;
 import pl.dawid0604.pcForum.repository.post.custom.PostRepositoryCustom;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -66,4 +67,14 @@ public interface PostRepository extends EntityBaseRepository<PostEntity>, PostRe
             WHERE p.id = :postId
            """)
     Optional<PostEntity> findContentById(long postId);
+
+    @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.post.PostEntity(p.encryptedId, new pl.dawid0604.pcForum.dao.user.UserProfileEntity(up.encryptedId, up.avatar, up.nickname),
+                                                                p.createdAt, p.content, new pl.dawid0604.pcForum.dao.thread.ThreadEntity(t.encryptedId, t.title))
+            FROM #{#entityName} p
+            LEFT JOIN p.userProfile up
+            LEFT JOIN p.thread t
+            WHERE up.id = :userId
+           """)
+    List<PostEntity> findPostsByUser(long userId);
 }

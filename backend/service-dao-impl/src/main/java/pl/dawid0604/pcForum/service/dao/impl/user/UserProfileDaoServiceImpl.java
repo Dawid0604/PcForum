@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static pl.dawid0604.pcForum.utils.DateFormatter.getCurrentDate;
 
 @Service
 class UserProfileDaoServiceImpl extends EntityBaseDaoServiceImpl<UserProfileEntity>
@@ -76,12 +77,18 @@ class UserProfileDaoServiceImpl extends EntityBaseDaoServiceImpl<UserProfileEnti
     @Override
     @Transactional
     public void setAsOnline(final List<String> onlineUsers) {
-        userProfileRepository.setAsOnline(onlineUsers);
+        userProfileRepository.setAsOnline(onlineUsers, getCurrentDate());
         userProfileRepository.setAsOffline(onlineUsers);
     }
 
     @Override
     public long count() {
         return userProfileRepository.count();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<UserProfileEntity> findNicknameAvatarEncryptedIdById(final String encryptedUserProfileId) {
+        return userProfileRepository.findNicknameAvatarEncryptedIdById(encryptionService.decryptId(encryptedUserProfileId));
     }
 }

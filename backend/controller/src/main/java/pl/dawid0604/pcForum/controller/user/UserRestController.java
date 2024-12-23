@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.dawid0604.pcForum.dto.user.ActivitySummaryDTO;
 import pl.dawid0604.pcForum.dto.user.UserRegistartionDTO;
 import pl.dawid0604.pcForum.dto.user.UsersDTO;
+import pl.dawid0604.pcForum.service.user.UserProfileObservationRestService;
 import pl.dawid0604.pcForum.service.user.UserProfileRestService;
 import pl.dawid0604.pcForum.service.user.UserProfileVisitorRestService;
 import pl.dawid0604.pcForum.utils.constants.ActivitySummarySortType;
@@ -19,6 +20,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class UserRestController {
     private final UserProfileRestService userProfileRestService;
     private final UserProfileVisitorRestService userProfileVisitorRestService;
+    private final UserProfileObservationRestService userProfileObservationRestService;
 
     @GetMapping("/user/profile/base")
     public ResponseEntity<?> getUserProfileBaseInfo() {
@@ -37,8 +39,14 @@ public class UserRestController {
 
     @ResponseStatus(NO_CONTENT)
     @PatchMapping("/user/profile/{encryptedId}/handle/view")
-    public void handleThreadView(@PathVariable("encryptedId") final String encryptedUserProfileId) {
+    public void handleProfileView(@PathVariable("encryptedId") final String encryptedUserProfileId) {
         userProfileVisitorRestService.handleProfileView(encryptedUserProfileId);
+    }
+
+    @ResponseStatus(NO_CONTENT)
+    @PatchMapping("/user/profile/{encryptedId}/handle/observe")
+    public void handleProfileFollow(@PathVariable("encryptedId") final String encryptedUserProfileId) {
+        userProfileObservationRestService.handleProfileFollow(encryptedUserProfileId);
     }
 
     @ResponseStatus(OK)
@@ -55,4 +63,23 @@ public class UserRestController {
         return userProfileRestService.getNumberOfOnlineUsers();
     }
 
+    @GetMapping("/user/profile/{encryptedId}/threads")
+    public ResponseEntity<?> findUserProfileThreads(@PathVariable("encryptedId") final String encryptedUserProfileId) {
+        return new ResponseEntity<>(userProfileRestService.findUserProfileThreads(encryptedUserProfileId), OK);
+    }
+
+    @GetMapping("/user/profile/{encryptedId}/posts")
+    public ResponseEntity<?> findUserProfilePosts(@PathVariable("encryptedId") final String encryptedUserProfileId) {
+        return new ResponseEntity<>(userProfileRestService.findUserProfilePosts(encryptedUserProfileId), OK);
+    }
+
+    @GetMapping("/user/profile/{encryptedId}/visitors")
+    public ResponseEntity<?> findUserProfileVisitors(@PathVariable("encryptedId") final String encryptedUserProfileId) {
+        return new ResponseEntity<>(userProfileRestService.findUserProfileVisitors(encryptedUserProfileId), OK);
+    }
+
+    @GetMapping("/user/profile/{encryptedId}/observations")
+    public ResponseEntity<?> findUserProfileObservations(@PathVariable("encryptedId") final String encryptedUserProfileId) {
+        return new ResponseEntity<>(userProfileRestService.findUserProfileObservations(encryptedUserProfileId), OK);
+    }
 }

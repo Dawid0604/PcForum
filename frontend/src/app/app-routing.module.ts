@@ -9,6 +9,10 @@ import { ThreadCreatorComponent } from './components/thread-creator/thread-creat
 import { AuthorizationGuard } from './guard/authorization.guard';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { BrowserComponent } from './components/browser/browser.component';
+import { UserProfileThreadsComponent } from './components/user-profile-threads/user-profile-threads.component';
+import { UserProfilePostsComponent } from './components/user-profile-posts/user-profile-posts.component';
+import { UserProfileVisitorsComponent } from './components/user-profile-visitors/user-profile-visitors.component';
+import { UserProfileFollowersComponent } from './components/user-profile-followers/user-profile-followers.component';
 
 const routes: Routes = [
   {
@@ -35,6 +39,22 @@ const routes: Routes = [
   {
     path: "register",
     component: RegisterComponent
+  },
+  {
+    path: "user_threads/:ref",
+    component: UserProfileThreadsComponent
+  },
+  {
+    path: "user_posts/:ref",
+    component: UserProfilePostsComponent
+  },
+  {
+    path: "user_visitors/:ref",
+    component: UserProfileVisitorsComponent
+  },
+  {
+    path: "user_followers/:ref",
+    component: UserProfileFollowersComponent
   },
   {
     path: "user/:ref/:nickname",

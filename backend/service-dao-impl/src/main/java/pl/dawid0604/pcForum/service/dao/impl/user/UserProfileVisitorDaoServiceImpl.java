@@ -14,6 +14,7 @@ import pl.dawid0604.pcForum.service.dao.impl.EntityBaseDaoServiceImpl;
 import pl.dawid0604.pcForum.service.dao.user.UserProfileVisitorDaoService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -55,25 +56,31 @@ class UserProfileVisitorDaoServiceImpl extends EntityBaseDaoServiceImpl<UserProf
     @Transactional
     public void handleProfileView(final String encryptedUserProfileId) {
         UserProfileEntity loggedUser = getLoggedUserProfile();
-        UserProfileEntity visitedUserProfile = userProfileRepository.findIdByIdWithoutFields(encryptionService.decryptId(encryptedUserProfileId))
+        UserProfileEntity userProfileToObserve = userProfileRepository.findIdByIdWithoutFields(encryptionService.decryptId(encryptedUserProfileId))
                                                                     .orElseThrow();
 
-        if(Objects.equals(loggedUser.getEncryptedId(), visitedUserProfile.getEncryptedId())) {
+        if(Objects.equals(loggedUser.getEncryptedId(), userProfileToObserve.getEncryptedId())) {
             return;
         }
 
-        if(userProfileVisitorRepository.existsProfileVisitById(encryptionService.decryptId(encryptedUserProfileId))) {
+        if(userProfileVisitorRepository.existsVisitByUsers(encryptionService.decryptId(loggedUser.getEncryptedId()), encryptionService.decryptId(encryptedUserProfileId))) {
             userProfileVisitorRepository.updateLastActivity(encryptionService.decryptId(encryptedUserProfileId), getCurrentDate());
 
         } else {
             LocalDateTime now = getCurrentDate();
             save(UserProfileVisitorEntity.builder()
-                                                 .profile(visitedUserProfile)
+                                                 .profile(userProfileToObserve)
                                                  .visitor(loggedUser)
                                                  .firstVisitDate(now)
                                                  .lastVisitDate(now)
                                                  .build());
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserProfileVisitorEntity> findVisitorsByUser(final String encryptedUserProfileId) {
+        return userProfileVisitorRepository.findVisitorsByUser(encryptionService.decryptId(encryptedUserProfileId));
     }
 
     private UserProfileEntity getLoggedUserProfile() {

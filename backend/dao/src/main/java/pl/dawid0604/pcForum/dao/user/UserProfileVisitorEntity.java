@@ -31,4 +31,13 @@ public class UserProfileVisitorEntity extends EntityBase {
     @Setter
     @Column(name = "LastVisitDate")
     private LocalDateTime lastVisitDate;
+
+    @SuppressWarnings("unused")
+    public UserProfileVisitorEntity(final UserProfileEntity visitor, final LocalDateTime firstVisitDate,
+                                    final LocalDateTime lastVisitDate) {
+
+        this.visitor = visitor;
+        this.firstVisitDate = firstVisitDate;
+        this.lastVisitDate = lastVisitDate;
+    }
 }

@@ -11,7 +11,15 @@ public interface UserProfileRestService {
 
     UserProfileDetailsDTO getUserProfileDetailsInfo(String encryptedUserProfileId);
 
+    UserProfileThreadsDTO findUserProfileThreads(String encryptedUserProfileId);
+
+    UserProfilePostsDTO findUserProfilePosts(String encryptedUserProfileId);
+
+    UserProfileVisitorsDTO findUserProfileVisitors(String encryptedUserProfileId);
+
     ActivitySummaryDTO getActivitySummary(ActivitySummarySortType summarySortType, int numberOfUsers);
 
     UsersDTO getNumberOfOnlineUsers();
+
+    UserProfileObservationsDTO findUserProfileObservations(String encryptedUserProfileId);
 }

@@ -33,4 +33,6 @@ public interface ThreadDaoService {
     void deleteThread(String encryptedThreadId);
 
     long countThreadsByUser(String encryptedUserId);
+
+    List<ThreadEntity> findThreadsByUser(String encryptedId);
 }

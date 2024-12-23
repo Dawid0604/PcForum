@@ -17,6 +17,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ThreadCreatorComponent } from './components/thread-creator/thread-creator.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { BrowserComponent } from './components/browser/browser.component';
+import { UserProfileThreadsComponent } from './components/user-profile-threads/user-profile-threads.component';
+import { UserProfilePostsComponent } from './components/user-profile-posts/user-profile-posts.component';
+import { UserProfileFollowersComponent } from './components/user-profile-followers/user-profile-followers.component';
+import { UserProfileVisitorsComponent } from './components/user-profile-visitors/user-profile-visitors.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,11 @@ import { BrowserComponent } from './components/browser/browser.component';
     RegisterComponent,
     ThreadCreatorComponent,
     UserProfileComponent,
-    BrowserComponent
+    BrowserComponent,
+    UserProfileThreadsComponent,
+    UserProfilePostsComponent,
+    UserProfileFollowersComponent,
+    UserProfileVisitorsComponent
   ],
   imports: [
     BrowserModule,

@@ -9,4 +9,9 @@ import pl.dawid0604.pcForum.service.user.UserProfileObservationRestService;
 @RequiredArgsConstructor
 class UserProfileObservationRestServiceImpl implements UserProfileObservationRestService {
     private final UserProfileObservationDaoService userProfileObservationDaoService;
+
+    @Override
+    public void handleProfileFollow(final String encryptedUserProfileId) {
+        userProfileObservationDaoService.handleProfileFollow(encryptedUserProfileId);
+    }
 }

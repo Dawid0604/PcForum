@@ -36,7 +36,7 @@
                     </p>
 
                     <p>
-                        <fa-icon [icon]="followerIcon"></fa-icon>&nbsp;{{userProfile.numberOfFollowers}} followers
+                        <fa-icon [icon]="observationsIcon"></fa-icon>&nbsp;{{userProfile.numberOfObservations}} observations
                     </p>
 
                     <p>
@@ -56,25 +56,33 @@
                 </div>
                 
                 <div id="down_left_controls">
-                    <button class="up_button" title="Show threads">
+                    <button class="up_button" title="Show threads" [routerLink]="[ '/user_threads', userProfile.encryptedId ]">
                         <fa-icon [icon]="threadsIcon"></fa-icon>
                     </button>
 
-                    <button class="up_button" title="Show posts">
+                    <button class="up_button" title="Show posts" [routerLink]="[ '/user_posts', userProfile.encryptedId ]">
                         <fa-icon [icon]="postsIcon"></fa-icon>
                     </button>
 
-                    <button class="up_button" title="Show followers">
-                        <fa-icon [icon]="followerIcon"></fa-icon>
+                    <button class="up_button" title="Show followers" [routerLink]="[ '/user_followers', userProfile.encryptedId ]">
+                        <fa-icon [icon]="observationsIcon"></fa-icon>
                     </button>
 
-                    <button class="up_button" title="Show visitors">
+                    <button class="up_button" title="Show visitors" [routerLink]="[ '/user_visitors', userProfile.encryptedId ]">
                         <fa-icon [icon]="visitIcon"></fa-icon>
                     </button>
 
-                    <button *ngIf="!userProfile.isLoggedUser" class="up_button" [title]="isUserLoggedIn ? 'Write message' : 'Log in to write message'" [disabled]="!isUserLoggedIn">
-                        <fa-icon [icon]="messageIcon"></fa-icon>
-                    </button>
+                    @if(isUserLoggedIn && !userProfile.isLoggedUser) {
+                        <button class="up_button" title="Write the message">
+                            <fa-icon [icon]="messageIcon"></fa-icon>
+                        </button>
+    
+                        <button class="up_button" (click)="observe()" [ngStyle]="{ 'background-color': userProfile.isObserved ? 'orange' : '' }"
+                                [title]="userProfile.isObserved ? 'Cancel observation' : 'Observe'" [ngClass]="userProfile.isObserved ? 'up_button_observation_cancel' : 'up_button_observation'">
+
+                            <fa-icon [icon]="observationIcon"></fa-icon>
+                        </button>
+                    }                    
                 </div>
             </div>        
 
@@ -82,7 +90,7 @@
                 <div class="last-activity-item_box">
                     <div class="last_activity_left">                        
                         <p>
-                            <fa-icon [icon]="followerIcon"></fa-icon>                            
+                            <fa-icon [icon]="observationsIcon"></fa-icon>                            
                             <span style="font-size: small;">&nbsp; 5 minutes ago</span>
                         </p>
                     </div>

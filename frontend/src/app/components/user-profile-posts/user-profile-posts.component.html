@@ -1,0 +1,43 @@
+<main>
+    <section id="posts_box" class="box">        
+        <div class="row_last_post_box">
+            <div class="row_user_icon">
+                <img [src]="userProfile.avatar" title="Enter to user profile" [routerLink]="[ '/user', userProfile.encryptedId, userProfile.nickname]">
+            </div>
+
+            <div class="row_last_post">
+                <h2>{{userProfile.nickname}} <span style="font-size: small;">posts</span></h2>
+            </div>                                  
+        </div>
+
+        
+        <div class="row_item" *ngFor="let post of userProfile.posts">
+            <div class="row_icon" title="Post">
+                <fa-icon [icon]="postsIcon"></fa-icon>
+            </div>
+
+            <div class="row_title_desc_box">
+                <a [routerLink]="[ '/thread', post.thread.encryptedId, post.thread.title]" class="row_item_thread_post">                        
+                    <span>{{post.thread.title}}</span>
+                </a>
+
+                <div class="thread_user_content">
+                    <div *ngFor="let contentFragment of post.content">                    
+                        @if(contentFragment.meta) {
+                            <blockquote>
+                                <div> User <b>{{contentFragment.meta.authorNickname}}</b> wrote at <b>{{contentFragment.meta.dateAdded}}</b></div>
+                                <div [innerHTML]="contentFragment.content"></div>
+                            </blockquote>
+                        
+                        } @else {
+                            <p [innerHTML]="contentFragment.content"></p>
+                        }
+                    </div>                    
+                </div>
+            </div>
+
+            <div class="row_stats"></div>
+            <div class="row_last_post_box"> <span style="font-size: smaller;">{{post.createdAt}}</span></div>
+        </div>
+    </section>
+</main>

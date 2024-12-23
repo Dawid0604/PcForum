@@ -7,24 +7,32 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.dawid0604.pcForum.dao.user.UserEntity;
-import pl.dawid0604.pcForum.dao.user.UserEntityRole;
-import pl.dawid0604.pcForum.dao.user.UserProfileEntity;
-import pl.dawid0604.pcForum.dao.user.UserProfileRankEntity;
+import pl.dawid0604.pcForum.dao.post.PostEntity;
+import pl.dawid0604.pcForum.dao.post.PostEntityContent;
+import pl.dawid0604.pcForum.dao.thread.ThreadEntity;
+import pl.dawid0604.pcForum.dao.user.*;
+import pl.dawid0604.pcForum.dto.post.ExtendedPostDTO;
+import pl.dawid0604.pcForum.dto.post.PostContentDTO;
+import pl.dawid0604.pcForum.dto.post.ThreadNewestPostDTO;
+import pl.dawid0604.pcForum.dto.thread.ThreadDTO;
 import pl.dawid0604.pcForum.dto.user.*;
 import pl.dawid0604.pcForum.service.dao.post.PostDaoService;
 import pl.dawid0604.pcForum.service.dao.post.PostReactionDaoService;
 import pl.dawid0604.pcForum.service.dao.session.SpringSessionDaoService;
+import pl.dawid0604.pcForum.service.dao.thread.ThreadCategoryDaoService;
 import pl.dawid0604.pcForum.service.dao.thread.ThreadDaoService;
 import pl.dawid0604.pcForum.service.dao.user.*;
 import pl.dawid0604.pcForum.service.user.UserProfileRestService;
 import pl.dawid0604.pcForum.utils.constants.ActivitySummarySortType;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static pl.dawid0604.pcForum.utils.DateFormatter.formatDate;
@@ -42,6 +50,7 @@ class UserProfileRestServiceImpl implements UserProfileRestService {
     private final UserProfileObservationDaoService userProfileObservationDaoService;
     private final UserDaoService userDaoService;
     private final SpringSessionDaoService springSessionDaoService;
+    private final ThreadCategoryDaoService threadCategoryDaoService;
 
     @Override
     public UserProfileDTO getUserProfileBaseInfo() {
@@ -104,14 +113,91 @@ class UserProfileRestServiceImpl implements UserProfileRestService {
         long numberOfUpVotes = postReactionDaoService.countUpVotesByUser(userProfile.getEncryptedId());
         long numberOfDownVotes = postReactionDaoService.countDownVotesByUser(userProfile.getEncryptedId());
         long numberOfVisits = userProfileVisitorDaoService.countVisitsByUser(userProfile.getEncryptedId());
-        long numberOfFollowers = userProfileObservationDaoService.countObservationsByUser(userProfile.getEncryptedId());
+        long numberOfObservations = userProfileObservationDaoService.countObservationsByUser(userProfile.getEncryptedId());
 
-        boolean isLoggedUser = isLoggedUser(userProfile.getEncryptedId());
+        boolean isObserved = false;
+        boolean isLoggedUser = false;
+        var possibleLoggedUser = getLoggedUserProfile();
+
+        if(possibleLoggedUser.isPresent()) {
+            var loggedUser = possibleLoggedUser.get();
+            isLoggedUser = loggedUser.getEncryptedId().equals(userProfile.getEncryptedId());
+            isObserved = userProfileObservationDaoService.isObserved(loggedUser.getEncryptedId(), userProfile.getEncryptedId());
+        }
+
         var activities = mapActivities(userProfile.getEncryptedId());
-
-        return new UserProfileDetailsDTO(userProfile.getAvatar(), userProfile.getNickname(), userProfile.getRank().getName(), formatDate(userProfile.getCreatedAt()),
+        return new UserProfileDetailsDTO(userProfile.getEncryptedId(), userProfile.getAvatar(), userProfile.getNickname(), userProfile.getRank().getName(), formatDate(userProfile.getCreatedAt()),
                                          formatDate(userProfile.getLastActivity()), numberOfPosts, numberOfThreads, numberOfUpVotes, numberOfDownVotes, numberOfVisits,
-                                         numberOfFollowers, activities, isLoggedUser, userProfile.isOnline());
+                numberOfObservations, activities, isLoggedUser, userProfile.isOnline(), isObserved);
+    }
+
+    @Override
+    public UserProfileThreadsDTO findUserProfileThreads(final String encryptedUserProfileId) {
+        var userProfile = userProfileDaoService.findNicknameAvatarEncryptedIdById(encryptedUserProfileId)
+                                               .orElseThrow();
+
+        var threads = threadDaoService.findThreadsByUser(userProfile.getEncryptedId())
+                                      .stream()
+                                      .map(this::mapThread)
+                                      .toList();
+
+        return new UserProfileThreadsDTO(userProfile.getNickname(), userProfile.getAvatar(), userProfile.getEncryptedId(), threads);
+    }
+
+    @Override
+    public UserProfilePostsDTO findUserProfilePosts(final String encryptedUserProfileId) {
+        var userProfile = userProfileDaoService.findNicknameAvatarEncryptedIdById(encryptedUserProfileId)
+                                               .orElseThrow();
+
+        var posts = postDaoService.findPostsByUser(userProfile.getEncryptedId())
+                                  .stream()
+                                  .map(this::mapPost)
+                                  .toList();
+
+        return new UserProfilePostsDTO(userProfile.getNickname(), userProfile.getAvatar(), userProfile.getEncryptedId(), posts);
+    }
+
+    @Override
+    public UserProfileVisitorsDTO findUserProfileVisitors(final String encryptedUserProfileId) {
+        var userProfile = userProfileDaoService.findNicknameAvatarEncryptedIdById(encryptedUserProfileId)
+                                               .orElseThrow();
+
+        var visitors = userProfileVisitorDaoService.findVisitorsByUser(userProfile.getEncryptedId())
+                                                   .stream()
+                                                   .map(this::mapVisitor)
+                                                   .toList();
+
+        return new UserProfileVisitorsDTO(userProfile.getNickname(), userProfile.getAvatar(), userProfile.getEncryptedId(), visitors);
+    }
+
+    private UserProfileVisitorDTO mapVisitor(final UserProfileVisitorEntity userProfileVisitorEntry) {
+        var userProfile = userProfileVisitorEntry.getVisitor();
+        return new UserProfileVisitorDTO(userProfile.getEncryptedId(), userProfile.getNickname(), userProfile.getAvatar(),
+                          formatDate(userProfileVisitorEntry.getFirstVisitDate()), formatDate(userProfileVisitorEntry.getLastVisitDate()));
+    }
+
+    @Transactional(readOnly = true)
+    private ThreadDTO mapThread(final ThreadEntity threadEntity) {
+        String categoryName = null;
+
+        if(threadEntity.getCategoryLevelPathTwo() != null && threadEntity.getCategoryLevelPathThree() != null) {
+            categoryName = threadCategoryDaoService.findCategoryName(threadEntity.getCategoryLevelPathOne(), threadEntity.getCategoryLevelPathTwo(),
+                                                                     threadEntity.getCategoryLevelPathThree())
+                                                   .orElseThrow();
+        }
+
+        return new ThreadDTO(threadEntity.getEncryptedId(), threadEntity.getTitle(), threadEntity.getUserProfile().getEncryptedId(),
+                             threadEntity.getUserProfile().getNickname(), threadEntity.getUserProfile().getAvatar(),
+                             formatDate(threadEntity.getLastActivity()), categoryName, getNewestPost(threadEntity.getEncryptedId()),
+                             threadEntity.getNumberOfViews(), postDaoService.countPostsByThread(threadEntity.getEncryptedId()));
+    }
+
+    @Transactional(readOnly = true)
+    private ThreadNewestPostDTO getNewestPost(final String encryptedThreadId) {
+        return postDaoService.findNewestByThreadId(encryptedThreadId)
+                             .map(_post -> new ThreadNewestPostDTO(_post.getEncryptedId(), _post.getUserProfile().getEncryptedId(), _post.getUserProfile().getNickname(),
+                                                                   _post.getUserProfile().getAvatar(), formatDate(_post.getCreatedAt())))
+                             .orElse(null);
     }
 
     @Override
@@ -140,6 +226,25 @@ class UserProfileRestServiceImpl implements UserProfileRestService {
         return new UsersDTO(userProfileDaoService.count(), onlineUsers.size());
     }
 
+    @Override
+    public UserProfileObservationsDTO findUserProfileObservations(final String encryptedUserProfileId) {
+        var userProfile = userProfileDaoService.findNicknameAvatarEncryptedIdById(encryptedUserProfileId)
+                                               .orElseThrow();
+
+        var observations = userProfileObservationDaoService.findObservationsByUser(userProfile.getEncryptedId())
+                                                           .stream()
+                                                           .map(this::mapObservation)
+                                                           .toList();
+
+        return new UserProfileObservationsDTO(userProfile.getNickname(), userProfile.getAvatar(), userProfile.getEncryptedId(), observations);
+    }
+
+    private UserProfileObservationDTO mapObservation(final UserProfileObservationEntity userProfileObservationEntry) {
+        var userProfile = userProfileObservationEntry.getProfile();
+        return new UserProfileObservationDTO(userProfile.getEncryptedId(), userProfile.getNickname(), userProfile.getAvatar(),
+                                             formatDate(userProfileObservationEntry.getObservationDate()));
+    }
+
     @Transactional(readOnly = true)
     private ActivitySummaryDTO.UserDTO mapProfile(final UserProfileEntity userProfile, final LocalDateTime dateFrom) {
         long numberOfUpVotes = postReactionDaoService.countUpVotesByIdWithTimeInterval(userProfile.getEncryptedId(), dateFrom);
@@ -150,22 +255,45 @@ class UserProfileRestServiceImpl implements UserProfileRestService {
         return emptyList();
     }
 
-    private boolean isLoggedUser(final String searchedUserProfileEncryptedId) {
+    private Optional<UserProfileEntity> getLoggedUserProfile() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(!(authentication instanceof AnonymousAuthenticationToken)) {
-            var loggedUserUsername = ((User) authentication.getPrincipal())
-                                                           .getUsername();
+            String loggedUserUsername =  ((User) authentication.getPrincipal()).getUsername();
+            return Optional.of(userProfileDaoService.findByUsername(loggedUserUsername)
+                                                    .orElseThrow());
+        }
 
-            return userProfileDaoService.findEncryptedIdByUsername(loggedUserUsername)
-                                        .map(_userProfile -> _userProfile.equals(searchedUserProfileEncryptedId))
-                                        .orElseThrow();
-        } return false;
+        return Optional.empty();
     }
 
     private static String getLoggedUserUsername() {
         return ((User) SecurityContextHolder.getContext()
                                             .getAuthentication()
                                             .getPrincipal()).getUsername();
+    }
+
+    private ExtendedPostDTO mapPost(final PostEntity post) {
+        var userProfile = new UserProfileDTO(post.getUserProfile().getEncryptedId(), post.getUserProfile().getNickname(), post.getUserProfile().getAvatar());
+        var thread = new ExtendedPostDTO.Thread(post.getThread().getEncryptedId(), post.getThread().getTitle());
+        var content = mapContent(post.getContent());
+        return new ExtendedPostDTO(post.getEncryptedId(), userProfile, formatDate(post.getCreatedAt()), thread, content);
+    }
+
+    private List<PostContentDTO> mapContent(final List<PostEntityContent> contentEntities) {
+        List<PostContentDTO> groupedContent = new LinkedList<>();
+
+        for(var _contentFragment: contentEntities) {
+            if(isNotBlank(_contentFragment.postId())) {
+                var blockquotePost = postDaoService.findContentAndUserById(_contentFragment.postId())
+                                                   .orElseThrow();
+
+                for(var _blockquoteContent: blockquotePost.getContent()) {
+                    var meta = new PostContentDTO.BlockquoteMetaDTO(blockquotePost.getUserProfile().getNickname(), formatDate(blockquotePost.getCreatedAt()));
+                    groupedContent.add(new PostContentDTO(_blockquoteContent.content(), meta));
+                }
+            } groupedContent.add(new PostContentDTO(_contentFragment.content(), null));
+
+        } return groupedContent;
     }
 }

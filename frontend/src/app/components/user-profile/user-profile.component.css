@@ -94,3 +94,11 @@
 #down_left_controls button {
     margin: 0.5em;
 }
+
+.up_button_observation:hover {
+    background-color: orange;
+}
+
+.up_button_observation_cancel:hover {
+    background-color: red !important;
+}

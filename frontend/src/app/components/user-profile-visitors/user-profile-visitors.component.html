@@ -1,0 +1,37 @@
+<main>
+    <section id="posts_box" class="box">        
+        <div class="row_last_post_box">
+            <div class="row_user_icon">
+                <img [src]="userProfile.avatar" title="Enter to user profile" [routerLink]="[ '/user', userProfile.encryptedId, userProfile.nickname]">
+            </div>
+
+            <div class="row_last_post">
+                <h2>{{userProfile.nickname}} <span style="font-size: small;">visitors</span></h2>
+            </div>                                  
+        </div>
+        
+        <div class="row_item" *ngFor="let visitor of userProfile.visitors">
+            <div class="row_icon" title="User profile"></div>
+        
+            <div class="row_last_post_box">
+                <div class="row_user_icon">
+                    <img [src]="visitor.avatar" title="Enter to user profile" [routerLink]="[ '/user', visitor.encryptedId, visitor.nickname]">
+                </div>  
+
+                <h4>{{visitor.nickname}}</h4>
+            </div>
+
+            <div class="row_stats">
+                <fa-icon [icon]="dateIcon"></fa-icon>
+                <p><b>First visit:</b>{{visitor.firstVisitDate}}</p>
+            </div>
+
+            <div class="row_stats" *ngIf="visitor.lastVisitDate">
+                <fa-icon [icon]="dateIcon"></fa-icon>
+                <p><b>Last visit:</b>{{visitor.lastVisitDate}}</p>
+            </div>
+
+            <div class="row_title_desc_box"></div>
+        </div>
+    </section>
+</main>

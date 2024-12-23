@@ -113,4 +113,10 @@ class ThreadDaoServiceImpl extends EntityBaseDaoServiceImpl<ThreadEntity>
     public long countThreadsByUser(final String encryptedUserId) {
         return threadRepository.countThreadsByUser(encryptionService.decryptId(encryptedUserId));
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ThreadEntity> findThreadsByUser(final String encryptedId) {
+        return threadRepository.findThreadsByUser(encryptionService.decryptId(encryptedId));
+    }
 }

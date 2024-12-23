@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { faCertificate, faCircle, faCommentMedical, faComments, faEnvelope, faEye, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faCertificate, faCircle, faCommentMedical, faComments, faEnvelope, faEye, 
+         faStar, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { UserProfileDetailsDTO } from '../../model/UserProfileDetailsDTO';
 import { UserProfileService } from '../../service/user-profile.service';
 import { SessionService } from '../../service/session.service';
@@ -14,11 +15,13 @@ import { SessionService } from '../../service/session.service';
 export class UserProfileComponent implements OnInit {
   userProfile: UserProfileDetailsDTO = { } as UserProfileDetailsDTO;
   isUserLoggedIn: boolean = false;
+  isUserProfileObserved: boolean = false;
 
   likeIcon = faThumbsUp;
   dislikeIcon = faThumbsDown;
   visitIcon = faEye;
-  followerIcon = faCertificate;
+  observationsIcon = faCertificate;
+  observationIcon = faStar;
   postsIcon = faComments;
   threadsIcon = faCommentMedical;
   messageIcon = faEnvelope;
@@ -72,4 +75,17 @@ export class UserProfileComponent implements OnInit {
         })
   }
 
+  observe() {
+    this.userProfileService
+        .handleUserProfileObservation(this.userProfile.encryptedId)
+        .subscribe({
+          next: _res => this.userProfileService
+                            .getDetailsInfo(this.userProfile.encryptedId)
+                            .subscribe({
+                              next: _res => this.userProfile = _res,
+                              error: _err => console.log(_err)
+                            }),
+          error: _err => console.log(_err)
+        })
+  }
 }

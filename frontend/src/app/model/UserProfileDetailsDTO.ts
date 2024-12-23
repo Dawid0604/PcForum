@@ -1,4 +1,5 @@
 export interface UserProfileDetailsDTO {
+    encryptedId: string,
     avatar: string,
     nickname: string,
     rank: string,
@@ -7,12 +8,13 @@ export interface UserProfileDetailsDTO {
     numberOfUpVotes: number,
     numberOfDownVotes: number,
     numberOfVisits: number,
-    numberOfFollowers: number,
+    numberOfObservations: number,
     createdAt: string,
     lastActivity: string,
     activities: ActivityDTO[],
     isLoggedUser: boolean,
     isOnline: boolean
+    isObserved: boolean
 }
 
 export interface ActivityDTO {

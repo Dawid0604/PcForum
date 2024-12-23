@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.dawid0604.pcForum.dao.user.UserProfileEntity;
 import pl.dawid0604.pcForum.repository.EntityBaseRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,11 +57,18 @@ public interface UserProfileRepository extends EntityBaseRepository<UserProfileE
 
     @Modifying
     @Transactional
-    @Query("UPDATE #{#entityName} p SET p.isOnline = true WHERE p.nickname IN :onlineUsers")
-    void setAsOnline(List<String> onlineUsers);
+    @Query("UPDATE #{#entityName} p SET p.isOnline = true, p.lastActivity = :now WHERE p.nickname IN :onlineUsers")
+    void setAsOnline(List<String> onlineUsers, LocalDateTime now);
 
     @Modifying
     @Transactional
     @Query("UPDATE #{#entityName} p SET p.isOnline = false WHERE :onlineUsers IS NULL OR p.nickname NOT IN :onlineUsers")
     void setAsOffline(List<String> onlineUsers);
+
+    @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.user.UserProfileEntity(p.encryptedId, p.avatar, p.nickname)
+            FROM #{#entityName} p
+            WHERE p.id = :userId
+           """)
+    Optional<UserProfileEntity> findNicknameAvatarEncryptedIdById(long userId);
 }

@@ -29,4 +29,17 @@ public class UserProfileObservationEntity extends EntityBase {
 
     @Column(name = "ObservationDate")
     private LocalDateTime observationDate;
+
+    @SuppressWarnings("unused")
+    public UserProfileObservationEntity(final long id) {
+        this.id = id;
+    }
+
+    @SuppressWarnings("unused")
+    public UserProfileObservationEntity(final String encryptedId, final UserProfileEntity profile,
+                                        final LocalDateTime observationDate) {
+        super(encryptedId);
+        this.profile = profile;
+        this.observationDate = observationDate;
+    }
 }

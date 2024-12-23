@@ -10,6 +10,7 @@ import pl.dawid0604.pcForum.dao.thread.ThreadEntity;
 import pl.dawid0604.pcForum.repository.EntityBaseRepository;
 import pl.dawid0604.pcForum.repository.thread.custom.ThreadRepositoryCustom;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -82,4 +83,14 @@ public interface ThreadRepository extends EntityBaseRepository<ThreadEntity>, Th
             WHERE t.userProfile.id = :userId
            """)
     long countThreadsByUser(long userId);
+
+    @Query("""
+            SELECT new pl.dawid0604.pcForum.dao.thread.ThreadEntity(t.encryptedId, t.title, t.createdAt, t.lastActivity,
+                   new pl.dawid0604.pcForum.dao.user.UserProfileEntity(u.encryptedId, u.avatar, u.nickname), t.categoryLevelPathOne,
+                   t.categoryLevelPathTwo, t.categoryLevelPathThree, t.numberOfViews)
+            FROM #{#entityName} t
+            LEFT JOIN t.userProfile u
+            WHERE u.id = :userId
+           """)
+    List<ThreadEntity> findThreadsByUser(long userId);
 }

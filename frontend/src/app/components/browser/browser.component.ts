@@ -37,5 +37,4 @@ export class BrowserComponent implements OnInit {
           }
         })
   }
-
 }
